@@ -1,20 +1,71 @@
-/*********************************************
-
-Here is a description of any special CSS used.
-In this case it's just padding and margin to 0
-and then centring the canvas (and anything else)
-using the CSS Grid.
-
-Also hides overflow.
-
-**********************************************/
+/* Reset and General Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  padding: 0;
-  margin: 0;
-  display: grid; /* Set up the grid and justify/align to center */
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+header {
+  background-color: yellow;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 10px 20px;
+}
+
+.menu {
+  display: flex;
   justify-content: center;
-  align-content: center;
-  height: 100vh; /* Body is the height of the viewport */
-  overflow: hidden; /* Hide anything that goes off the window size */
+  gap: 20px;
+}
+
+.menu a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+  font-size: 18px;
+}
+
+.menu a:hover {
+  color: #555;
+}
+
+main {
+  padding: 20px;
+  text-align: center;
+}
+
+section {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+.main-header {
+  background: yellow;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  text-align: center;
+  transition: height 0.3s ease, padding 0.3s ease;
+  /* Smoothly animate height and padding */
+  height: 60px;
+  /* Initial height */
 }
