@@ -3,69 +3,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none;
 }
 
 body {
   font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background-color: #f9f9f9;
-  color: #333;
-}
-
-header {
-  background-color: yellow;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  padding: 10px 20px;
-}
-
-.menu {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.menu a {
-  text-decoration: none;
-  font-weight: bold;
-  color: #333;
-  font-size: 18px;
-}
-
-.menu a:hover {
-  color: #555;
-}
-
-main {
-  padding: 20px;
-  text-align: center;
-}
-
-section {
-  margin: 20px 0;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  background: white;
-}
-
-footer {
-  background: #333;
-  color: white;
-  text-align: center;
-  padding: 10px;
-}
-
-.main-header {
-  background: yellow;
-  padding: 10px 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  text-align: center;
-  transition: height 0.3s ease, padding 0.3s ease;
-  /* Smoothly animate height and padding */
-  height: 60px;
-  /* Initial height */
+  background-color: #ffffff;
+  cursor: none;
+  /* Hides the default cursor */
 }

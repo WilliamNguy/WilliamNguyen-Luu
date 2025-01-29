@@ -1,30 +1,128 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector('.main-header');
+let img;
+let sphere_size = 150;
+let rotation = 0;
+let x, y;
+let xspeed = 5, yspeed = 5;
+let t, col;
+let font;
 
-    // Adjust header size on scroll
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
+// Expand the bounce area to be twice the canvas size
+let bounceWidth, bounceHeight;
 
-        // Increase header size when scrolling upward
-        const scaleFactor = 1 + Math.max(0, 100 - scrollY) / 500; // Increase size gradually when scrolling up
-        header.style.transform = `scale(${scaleFactor})`;
+let presetBackgrounds = [
+    [255, 182, 193], [173, 216, 230], [152, 251, 152],
+    [240, 230, 140], [255, 228, 225]
+];
 
-        // Ensure the header doesn't scale beyond a normal size when scrolling down
-        if (scrollY > 100) {
-            header.style.transform = `scale(1)`;
-        }
-    });
-});
+let presetTints = [
+    [255, 99, 71], [60, 179, 113], [238, 130, 238],
+    [70, 130, 180], [255, 165, 0]
+];
 
-window.addEventListener('scroll', function () {
-    const header = document.querySelector('.main-header');
+let presetTexts = ["William", "Nguyen-Luu", "Creative", "Dynamic", "Bold"];
 
-    // Adjust header height based on scroll position
-    if (window.scrollY > 100) {
-        header.style.height = '100px'; // Increased height as you scroll down
-        header.style.padding = '20px 0'; // Optional: adjust padding for better aesthetics
-    } else {
-        header.style.height = '60px'; // Reset to initial height when at the top
-        header.style.padding = '10px 0'; // Reset padding
+let colorIndex = 0;
+
+function preload() {
+    img = loadImage("assets/images/part2.jpeg");
+    font = loadFont("assets/fonts/karla.ttf");
+}
+
+function setup() {
+    createCanvas(windowWidth, windowHeight, WEBGL);
+    noCursor();
+
+    // ✅ Double the bounce area
+    bounceWidth = width;  // Twice the width
+    bounceHeight = height; // Twice the height
+
+    // ✅ Place the sphere within the double-sized area
+    x = random(-bounceWidth, bounceWidth);
+    y = random(-bounceHeight, bounceHeight);
+
+    t = presetTints[0];
+    col = presetBackgrounds[0];
+}
+
+function draw() {
+    background(col);
+
+    // ✅ Adjust Camera for Larger View
+    let camZ = (bounceHeight / 2.0) / tan(PI / 6);
+    camera(0, 0, camZ * 2, 0, 0, 0, 0, 1, 0);
+
+    // ✅ Draw the Sphere (Now moves across the full expanded area)
+    push();
+    translate(x, y, 0);
+    rotateX(rotation);
+    rotateY(rotation);
+    tint(t[0], t[1], t[2]);
+    texture(img);
+    noStroke();
+    sphere(sphere_size);
+    pop();
+
+    // ✅ Move the Sphere
+    x += xspeed;
+    y += yspeed;
+
+    // ✅ Fix Collision to Use **Expanded Bounce Area**
+    let halfW = bounceWidth - sphere_size;
+    let halfH = bounceHeight - sphere_size;
+
+    if (x >= halfW || x <= -halfW) {
+        xspeed *= -1;
+        changeColors();
     }
-});
+
+    if (y >= halfH || y <= -halfH) {
+        yspeed *= -1;
+        changeColors();
+    }
+
+    // Rotate the sphere
+    rotation += 0.01;
+
+    // ✅ Draw Text
+    drawText();
+
+    // ✅ Fix Mouse Cursor (Now Moves Fully)
+    drawCursor();
+}
+
+function drawCursor() {
+    push();
+    // ✅ Convert Mouse Position to WEBGL Space for Larger Area
+    let cursorX = map(mouseX, 0, width, -bounceWidth, bounceWidth);
+    let cursorY = map(mouseY, 0, height, -bounceHeight, bounceHeight);
+
+    translate(cursorX, cursorY, 1);
+    fill(255, 182, 193);
+    noStroke();
+    ellipse(0, 0, 50, 50);
+    pop();
+}
+
+function drawText() {
+    push();
+    translate(0, -bounceHeight / 4, 600); // Move text forward for visibility
+    textAlign(CENTER, CENTER);
+    textFont(font);
+    textSize(80);
+    fill(50);
+    noStroke();
+    text(presetTexts[colorIndex % presetTexts.length], 0, 0);
+    pop();
+}
+
+function changeColors() {
+    col = presetBackgrounds[colorIndex % presetBackgrounds.length];
+    t = presetTints[colorIndex % presetTints.length];
+    colorIndex++;
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    bounceWidth = width;
+    bounceHeight = height;
+}
