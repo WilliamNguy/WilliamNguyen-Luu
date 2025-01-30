@@ -1,62 +1,51 @@
 let img;
 let sphere_size = 150;
 let rotation = 0;
-let x, y;
+let x = 0, y = 0;
 let xspeed = 5, yspeed = 5;
-let t, col;
-let font;
+let font, nguyenFont;
 
-// Expand the bounce area to be twice the canvas size
 let bounceWidth, bounceHeight;
-
-let presetBackgrounds = [
-    [255, 182, 193], [173, 216, 230], [152, 251, 152],
-    [240, 230, 140], [255, 228, 225]
-];
-
-let presetTints = [
-    [255, 99, 71], [60, 179, 113], [238, 130, 238],
-    [70, 130, 180], [255, 165, 0]
-];
-
-let presetTexts = ["William", "Nguyen-Luu", "Creative", "Dynamic", "Bold"];
+let presets;
 
 let colorIndex = 0;
 
 function preload() {
     img = loadImage("assets/images/part2.jpeg");
-    font = loadFont("assets/fonts/karla.ttf");
+    font = loadFont("assets/fonts/Lexend.ttf");
+    nguyenFont = loadFont("assets/fonts/BaskerItalic.ttf");
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     noCursor();
 
-    // ✅ Double the bounce area
-    bounceWidth = width;  // Twice the width
-    bounceHeight = height; // Twice the height
+    bounceWidth = width;
+    bounceHeight = height;
 
-    // ✅ Place the sphere within the double-sized area
-    x = random(-bounceWidth, bounceWidth);
-    y = random(-bounceHeight, bounceHeight);
-
-    t = presetTints[0];
-    col = presetBackgrounds[0];
+    // ✅ Define presets with multiple texts on the fourth background
+    presets = [
+        { background: [255, 182, 193], tint: [255, 99, 71], text: [""] },
+        { background: [173, 216, 230], tint: [60, 179, 113], text: ["William"], position: [-width / 3, 0] },
+        { background: [152, 251, 152], tint: [238, 130, 238], text: ["Nguyen-Luu"], position: [-width / 3.3, height / 5.5] },
+        { background: [240, 230, 140], tint: [70, 130, 180], text: ["William", "Nguyen-Luu"], positions: [[-width / 3, -100], [-width / 3.3, 100]] },
+        { background: [255, 228, 225], tint: [255, 165, 0], text: [""] }
+    ];
 }
 
 function draw() {
-    background(col);
+    let currentPreset = presets[colorIndex % presets.length];
+    background(currentPreset.background);
 
-    // ✅ Adjust Camera for Larger View
     let camZ = (bounceHeight / 2.0) / tan(PI / 6);
     camera(0, 0, camZ * 2, 0, 0, 0, 0, 1, 0);
 
-    // ✅ Draw the Sphere (Now moves across the full expanded area)
+    // ✅ Draw the Sphere
     push();
     translate(x, y, 0);
     rotateX(rotation);
     rotateY(rotation);
-    tint(t[0], t[1], t[2]);
+    tint(currentPreset.tint);
     texture(img);
     noStroke();
     sphere(sphere_size);
@@ -66,7 +55,6 @@ function draw() {
     x += xspeed;
     y += yspeed;
 
-    // ✅ Fix Collision to Use **Expanded Bounce Area**
     let halfW = bounceWidth - sphere_size;
     let halfH = bounceHeight - sphere_size;
 
@@ -80,22 +68,19 @@ function draw() {
         changeColors();
     }
 
-    // Rotate the sphere
     rotation += 0.01;
 
-    // ✅ Draw Text
-    drawText();
+    // ✅ Draw Text(s)
+    drawText(currentPreset);
 
-    // ✅ Fix Mouse Cursor (Now Moves Fully)
+    // ✅ Draw Custom Mouse Cursor
     drawCursor();
 }
 
 function drawCursor() {
     push();
-    // ✅ Convert Mouse Position to WEBGL Space for Larger Area
     let cursorX = map(mouseX, 0, width, -bounceWidth, bounceWidth);
     let cursorY = map(mouseY, 0, height, -bounceHeight, bounceHeight);
-
     translate(cursorX, cursorY, 1);
     fill(255, 182, 193);
     noStroke();
@@ -103,21 +88,34 @@ function drawCursor() {
     pop();
 }
 
-function drawText() {
-    push();
-    translate(0, -bounceHeight / 4, 600); // Move text forward for visibility
-    textAlign(CENTER, CENTER);
-    textFont(font);
-    textSize(80);
-    fill(50);
-    noStroke();
-    text(presetTexts[colorIndex % presetTexts.length], 0, 0);
-    pop();
+function drawText(preset) {
+    let texts = preset.text;
+    let positions = preset.positions || [[0, 0]];
+
+    // Loop through each text and draw it at its corresponding position
+    for (let i = 0; i < texts.length; i++) {
+        let word = texts[i];
+        let position = positions[i] || [0, 0];
+
+        push();
+        translate(position[0], position[1], 600);
+
+        if (word === "Nguyen-Luu") {
+            textFont(nguyenFont);
+        } else {
+            textFont(font);
+        }
+
+        textAlign(CENTER, CENTER);
+        textSize(140);
+        fill(50);
+        noStroke();
+        text(word, 0, 0);
+        pop();
+    }
 }
 
 function changeColors() {
-    col = presetBackgrounds[colorIndex % presetBackgrounds.length];
-    t = presetTints[colorIndex % presetTints.length];
     colorIndex++;
 }
 
@@ -125,4 +123,12 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     bounceWidth = width;
     bounceHeight = height;
+
+    presets = [
+        { background: [255, 182, 193], tint: [255, 99, 71], text: [""] },
+        { background: [173, 216, 230], tint: [60, 179, 113], text: ["William"], position: [-width / 3, 0] },
+        { background: [152, 251, 152], tint: [238, 130, 238], text: ["Nguyen-Luu"], position: [-width / 15, 0] },
+        { background: [240, 230, 140], tint: [70, 130, 180], text: ["William", "Nguyen-Luu"], positions: [[-width / 3, -100], [-width / 3.3, 100]] },
+        { background: [255, 228, 225], tint: [255, 165, 0], text: [""] }
+    ];
 }
