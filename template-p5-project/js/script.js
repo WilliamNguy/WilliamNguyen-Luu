@@ -23,13 +23,13 @@ function setup() {
     bounceWidth = width;
     bounceHeight = height;
 
-    // ✅ Define presets with multiple texts on the fourth background
+    // ✅ Define presets with consistent positions
     presets = [
-        { background: [255, 182, 193], tint: [255, 99, 71], text: [""] },
-        { background: [173, 216, 230], tint: [60, 179, 113], text: ["William"], position: [-width / 3, 0] },
-        { background: [152, 251, 152], tint: [238, 130, 238], text: ["Nguyen-Luu"], position: [-width / 3.3, height / 5.5] },
-        { background: [240, 230, 140], tint: [70, 130, 180], text: ["William", "Nguyen-Luu"], positions: [[-width / 3, -100], [-width / 3.3, 100]] },
-        { background: [255, 228, 225], tint: [255, 165, 0], text: [""] }
+        { background: [0, 0, 0], tint: [255, 99, 71], text: [""] },
+        { background: [255, 255, 255], tint: [60, 179, 113], text: ["William"], positions: [[-width / 3, 0]] },
+        { background: [0, 0, 0], tint: [238, 130, 238], text: ["Nguyen-Luu"], positions: [[-width / 3.3, 130]] },
+        { background: [240, 230, 140], tint: [70, 130, 180], text: ["William", "Nguyen-Luu"], positions: [[-width / 3, 0], [-width / 3.3, 130]] },
+        { background: [255, 228, 225], tint: [255, 165, 0], text: ["William"], positions: [[-width / 3, 0]] }
     ];
 }
 
@@ -92,7 +92,6 @@ function drawText(preset) {
     let texts = preset.text;
     let positions = preset.positions || [[0, 0]];
 
-    // Loop through each text and draw it at its corresponding position
     for (let i = 0; i < texts.length; i++) {
         let word = texts[i];
         let position = positions[i] || [0, 0];
@@ -100,20 +99,26 @@ function drawText(preset) {
         push();
         translate(position[0], position[1], 600);
 
+        // Disable lighting to ensure colors appear correctly
+        noLights();
+
+        // Apply the correct color and font
         if (word === "Nguyen-Luu") {
             textFont(nguyenFont);
+            fill(255);  // White color for "Nguyen-Luu"
         } else {
             textFont(font);
+            fill(50);   // Dark gray for other words
         }
 
         textAlign(CENTER, CENTER);
         textSize(140);
-        fill(50);
         noStroke();
         text(word, 0, 0);
         pop();
     }
 }
+
 
 function changeColors() {
     colorIndex++;
@@ -126,9 +131,9 @@ function windowResized() {
 
     presets = [
         { background: [255, 182, 193], tint: [255, 99, 71], text: [""] },
-        { background: [173, 216, 230], tint: [60, 179, 113], text: ["William"], position: [-width / 3, 0] },
-        { background: [152, 251, 152], tint: [238, 130, 238], text: ["Nguyen-Luu"], position: [-width / 15, 0] },
+        { background: [173, 216, 230], tint: [60, 179, 113], text: ["William"], positions: [[-width / 3, -100]] },
+        { background: [152, 251, 152], tint: [238, 130, 238], text: ["Nguyen-Luu"], positions: [[-width / 3.3, 100]] },
         { background: [240, 230, 140], tint: [70, 130, 180], text: ["William", "Nguyen-Luu"], positions: [[-width / 3, -100], [-width / 3.3, 100]] },
-        { background: [255, 228, 225], tint: [255, 165, 0], text: [""] }
+        { background: [255, 228, 225], tint: [255, 165, 0], text: ["William"], positions: [[-width / 3, -100]] }
     ];
 }
