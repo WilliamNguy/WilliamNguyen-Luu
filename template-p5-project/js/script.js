@@ -83,7 +83,7 @@ Object.assign(projectsLabel.style, {
     color: 'white',       // ⬅️ contrast on white
     fontFamily: 'Lexend',
     opacity: '0',
-    transition: 'opacity 0.5s ease',
+    transition: 'transform 0.005s ease-out',
     zIndex: '1'
 });
 
@@ -108,7 +108,7 @@ let scale = 1;
 const maxZoom = 6;
 
 window.addEventListener('wheel', (e) => {
-    scale += e.deltaY * 0.0015; // Inverted scroll
+    scale += e.deltaY * 0.0025; // Inverted scroll
     scale = Math.max(1, Math.min(scale, maxZoom));
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
     updateScene(scale);
@@ -130,7 +130,8 @@ function updateScene(scale) {
     if (scale > 4) {
         const darkness = Math.min((scale - 4) / 2, 1);
         topHalf.style.backgroundColor = `rgb(${255 * (1 - darkness)}, ${255 * (1 - darkness)}, ${255 * (1 - darkness)})`;
-        bottomHalf.style.backgroundColor = `rgb(${0 + 30 * darkness}, ${0 + 30 * darkness}, ${0 + 30 * darkness})`;
+        const whiteVal = Math.min(255, darkness * 255);
+        bottomHalf.style.backgroundColor = `rgb(${whiteVal}, ${whiteVal}, ${whiteVal})`;
     } else {
         topHalf.style.backgroundColor = 'white';
         bottomHalf.style.backgroundColor = 'black';
