@@ -5,7 +5,9 @@ document.body.style.padding = '0';
 document.body.style.height = '100vh';
 
 if (window.innerWidth < 768) {
-    document.body.style.overflow = 'auto'; // enable scroll on mobile
+    const spacer = document.createElement('div');
+    spacer.style.height = '300vh'; // gives 2 extra screens to scroll through
+    document.body.appendChild(spacer);
 } else {
     document.body.style.overflow = 'hidden'; // keep it locked on desktop
 }
@@ -172,6 +174,16 @@ window.addEventListener('wheel', (e) => {
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
     updateScene(scale);
 });
+
+if (window.innerWidth < 768) {
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const virtualScale = 1 + scrollTop / 400; // adjust 400 for sensitivity
+        const clampedScale = Math.min(virtualScale, maxZoom);
+        container.style.transform = `translate(-50%, -50%) scale(${clampedScale})`;
+        updateScene(clampedScale);
+    });
+}
 
 // === Scene Transition Logic ===
 function updateScene(scale) {
