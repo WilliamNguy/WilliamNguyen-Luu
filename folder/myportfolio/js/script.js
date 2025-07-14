@@ -222,7 +222,7 @@ function updateScene(scale) {
     if (scale > 1 && scale <= 4) {
         const slidePercent = Math.min((scale - 1) / 3, 1); // 0 → 1
         const start = 100;  // starts 100vh below
-        const end = 20;     // ends 20vh below (low on screen)
+        const end = -10;     // ends 20vh below (low on screen)
         const current = start - slidePercent * (start - end);
         video.style.transform = `translate(-50%, ${current}vh)`;
     } else if (scale > 4) {
