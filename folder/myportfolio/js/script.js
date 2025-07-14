@@ -4,7 +4,6 @@ document.body.style.padding = '0';
 document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
 
-
 // Top half (white)
 const topHalf = document.createElement('div');
 Object.assign(topHalf.style, {
