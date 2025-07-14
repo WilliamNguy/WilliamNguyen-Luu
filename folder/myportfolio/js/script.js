@@ -98,20 +98,23 @@ container.appendChild(firstName);
 container.appendChild(lastName);
 
 [firstName, lastName].forEach(name => {
+    name.style.cursor = 'pointer';
     name.addEventListener('click', () => {
         const target = 5.5;
         const step = 0.05;
 
-        const zoomInterval = setInterval(() => {
-            if (scale >= target) {
-                clearInterval(zoomInterval);
-            } else {
-                scale += step;
-                scale = Math.min(scale, target);
-                container.style.transform = `translate(-50%, -50%) scale(${scale})`;
-                updateScene(scale);
-            }
-        }, 10);
+        function animateZoom() {
+            if (scale >= target) return;
+
+            scale += step;
+            scale = Math.min(scale, target);
+            container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            updateScene(scale);
+
+            requestAnimationFrame(animateZoom);
+        }
+
+        requestAnimationFrame(animateZoom);
     });
 });
 
