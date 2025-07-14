@@ -221,15 +221,15 @@ function updateScene(scale) {
     // Slide donut image upward into view
     if (scale > 1 && scale <= 4) {
         const slidePercent = Math.min((scale - 1) / 3, 1); // 0 → 1
-        const startPx = window.innerHeight; // ~100vh in pixels
-        const endPx = window.innerHeight * 0.25; // target 25% from top
-
+        const startPx = window.innerHeight;               // ~100vh in pixels
+        const endPx = window.innerHeight * 0.25;          // stop 25% from top
         const currentPx = startPx - slidePercent * (startPx - endPx);
         video.style.transform = `translate(-50%, ${currentPx}px)`;
     } else if (scale > 4) {
-        video.style.transform = 'translate(-50%, 20vh)';
+        const finalPx = window.innerHeight * 0.25;
+        video.style.transform = `translate(-50%, ${finalPx}px)`;
     } else {
-        video.style.transform = 'translate(-50%, 100vh)';
+        video.style.transform = `translate(-50%, ${window.innerHeight}px)`;
     }
 
     // Show "Projects" label after scale 4.5
