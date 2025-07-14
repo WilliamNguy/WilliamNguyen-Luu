@@ -162,7 +162,7 @@ const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
 lexend.load().then(font => {
     document.fonts.add(font);
     firstName.style.fontFamily = 'Lexend';
-    projectsLabel.style.fontFamily = 'Lexend';
+    projectsLabel.style.fontFamily = 'Notable';
 });
 
 const basker = new FontFace('BaskerItalic', 'url(assets/fonts/BaskerItalic.ttf)');
@@ -175,7 +175,6 @@ const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
 notable.load().then(font => {
     document.fonts.add(font);
     projectsLabel.style.fontFamily = 'Notable';
-
 });
 
 
