@@ -26,9 +26,32 @@ Object.assign(bottomHalf.style, {
     width: '100vw',
     height: '50vh',
     backgroundColor: 'black',
-    zIndex: '-1'
+    zIndex: '-1',
+    transition: 'transform 0.3s ease'
 });
 document.body.appendChild(bottomHalf);
+
+const video = document.createElement('video');
+video.src = 'assets/videos/Donutreal.mp4'; // 🎥 your looped video path
+video.autoplay = true;
+video.loop = true;
+video.muted = true;
+video.playsInline = true; // Important for autoplay on mobile
+
+Object.assign(video.style, {
+    position: 'absolute',
+    bottom: '0',
+    left: '50%',
+    transform: 'translate(-50%, 100vh)',
+    width: '40vw',
+    maxWidth: '90%',
+    height: 'auto',
+    transition: 'transform 0.5s ease, opacity 0.5s ease',
+    zIndex: '-1',
+    opacity: '0',
+    objectFit: 'cover', // ✅ this removes black bars
+});
+document.body.appendChild(video);
 
 // === Name Container ===
 const container = document.createElement('div');
@@ -41,7 +64,7 @@ Object.assign(container.style, {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'transform 0.1s ease-out',
+    transition: 'transform 0.01s ease-out',
     zIndex: '1'
 });
 document.body.appendChild(container);
@@ -74,20 +97,42 @@ container.appendChild(lastName);
 
 // === Projects Label ===
 const projectsLabel = document.createElement('div');
-projectsLabel.textContent = '"Projects"';
+projectsLabel.textContent = 'William Nguyen-Luu';
 Object.assign(projectsLabel.style, {
     position: 'absolute',
-    top: '3vh',           // ⬅️ top half
+    top: '3vh',
     left: '3vw',
     fontSize: '2vw',
-    color: 'white',       // ⬅️ contrast on white
-    fontFamily: 'Lexend',
+    color: '#BE5B80',
+    fontFamily: 'Notable',
     opacity: '0',
-    transition: 'transform 0.005s ease-out',
+    transition: 'opacity 0.5s ease',
     zIndex: '1'
 });
-
 document.body.appendChild(projectsLabel);
+
+// === Invisible Nav Bar ===
+const navBar = document.createElement('div');
+Object.assign(navBar.style, {
+    position: 'absolute',
+    top: '2vh',
+    right: '3vw',
+    display: 'flex',
+    gap: '3vw',
+    fontSize: '1.5vw',
+    color: '#222',
+    fontFamily: 'Lexend',
+    opacity: '0',
+    transition: 'opacity 0.5s ease',
+    zIndex: '1',
+    pointerEvents: 'none' // makes it invisible to cursor clicks
+});
+navBar.innerHTML = `
+  <span>projects</span>
+  <span>work</span>
+  <span>about</span>
+`;
+document.body.appendChild(navBar);
 
 // === Load Fonts ===
 const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
@@ -103,12 +148,20 @@ basker.load().then(font => {
     lastName.style.fontFamily = 'BaskerItalic';
 });
 
+const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
+notable.load().then(font => {
+    document.fonts.add(font);
+    projectsLabel.style.fontFamily = 'Notable';
+
+});
+
+
 // === Scroll-Zoom Logic ===
 let scale = 1;
 const maxZoom = 6;
 
 window.addEventListener('wheel', (e) => {
-    scale += e.deltaY * 0.0025; // Inverted scroll
+    scale += e.deltaY * 0.0025;
     scale = Math.max(1, Math.min(scale, maxZoom));
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
     updateScene(scale);
@@ -125,16 +178,34 @@ function updateScene(scale) {
         firstName.style.opacity = '1';
         lastName.style.opacity = '1';
     }
-
-    // Darken background as scale increases beyond 4
-    if (scale > 4) {
-        const darkness = Math.min((scale - 4) / 2, 1);
-        topHalf.style.backgroundColor = `rgb(${255 * (1 - darkness)}, ${255 * (1 - darkness)}, ${255 * (1 - darkness)})`;
-        const whiteVal = Math.min(255, darkness * 255);
-        bottomHalf.style.backgroundColor = `rgb(${whiteVal}, ${whiteVal}, ${whiteVal})`;
+    // Fade-in donut image
+    if (scale > 1.5) {
+        video.style.opacity = '1';
     } else {
-        topHalf.style.backgroundColor = 'white';
-        bottomHalf.style.backgroundColor = 'black';
+        video.style.opacity = '0';
+    }
+
+    // Slide the black bottom background downward based on scale
+    if (scale > 1 && scale <= 4) {
+        const translateY = Math.min((scale - 1) * 100, 100); // up to 100% of its own height
+        bottomHalf.style.transform = `translateY(${translateY}%)`;
+    } else if (scale > 4) {
+        bottomHalf.style.transform = `translateY(100%)`; // completely off screen
+    } else {
+        bottomHalf.style.transform = `translateY(0%)`; // fully visible
+    }
+
+    // Slide donut image upward into view
+    if (scale > 1 && scale <= 4) {
+        const slidePercent = Math.min((scale - 1) / 3, 1); // 0 → 1
+        const start = 100;  // starts 100vh below
+        const end = 20;     // ends 20vh below (low on screen)
+        const current = start - slidePercent * (start - end);
+        video.style.transform = `translate(-50%, ${current}vh)`;
+    } else if (scale > 4) {
+        video.style.transform = 'translate(-50%, 20vh)';
+    } else {
+        video.style.transform = 'translate(-50%, 100vh)';
     }
 
     // Show "Projects" label after scale 4.5
@@ -143,5 +214,12 @@ function updateScene(scale) {
         projectsLabel.style.opacity = alpha;
     } else {
         projectsLabel.style.opacity = '0';
+    }
+
+    // Show nav bar after scale 4.5
+    if (scale > 4.5) {
+        navBar.style.opacity = '1';
+    } else {
+        navBar.style.opacity = '0';
     }
 }
