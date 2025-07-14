@@ -1,8 +1,14 @@
 // === Background Setup ===
 document.body.style.margin = '0';
 document.body.style.padding = '0';
-document.body.style.overflow = 'hidden';
+// document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
+
+if (window.innerWidth < 768) {
+    document.body.style.overflow = 'auto'; // enable scroll on mobile
+} else {
+    document.body.style.overflow = 'hidden'; // keep it locked on desktop
+}
 
 // Top half (white)
 const topHalf = document.createElement('div');
