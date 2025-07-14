@@ -1,15 +1,18 @@
+// === Scrollable Wrapper ===
+const scrollWrapper = document.createElement('div');
+scrollWrapper.style.position = 'relative';
+scrollWrapper.style.minHeight = '100vh';
+document.body.appendChild(scrollWrapper);
+
 // === Background Setup ===
 document.body.style.margin = '0';
 document.body.style.padding = '0';
-// document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
 
 if (window.innerWidth < 768) {
-    const spacer = document.createElement('div');
-    spacer.style.height = '300vh'; // gives 2 extra screens to scroll through
-    document.body.appendChild(spacer);
+    document.body.style.overflow = 'auto';
 } else {
-    document.body.style.overflow = 'hidden'; // keep it locked on desktop
+    document.body.style.overflow = 'hidden';
 }
 
 // Top half (white)
@@ -23,7 +26,7 @@ Object.assign(topHalf.style, {
     backgroundColor: 'white',
     zIndex: '-1'
 });
-document.body.appendChild(topHalf);
+scrollWrapper.appendChild(topHalf);
 
 // Bottom half (black)
 const bottomHalf = document.createElement('div');
@@ -37,15 +40,14 @@ Object.assign(bottomHalf.style, {
     zIndex: '-1',
     transition: 'transform 0.3s ease'
 });
-document.body.appendChild(bottomHalf);
+scrollWrapper.appendChild(bottomHalf);
 
 const video = document.createElement('video');
-video.src = 'assets/videos/Donutreal.mp4'; // 🎥 your looped video path
+video.src = 'assets/videos/Donutreal.mp4';
 video.autoplay = true;
 video.loop = true;
 video.muted = true;
-video.playsInline = true; // Important for autoplay on mobile
-
+video.playsInline = true;
 Object.assign(video.style, {
     position: 'absolute',
     bottom: '0',
@@ -57,9 +59,9 @@ Object.assign(video.style, {
     transition: 'transform 0.5s ease, opacity 0.5s ease',
     zIndex: '-1',
     opacity: '0',
-    objectFit: 'cover', // ✅ this removes black bars
+    objectFit: 'cover'
 });
-document.body.appendChild(video);
+scrollWrapper.appendChild(video);
 
 // === Name Container ===
 const container = document.createElement('div');
@@ -75,9 +77,8 @@ Object.assign(container.style, {
     transition: 'transform 0.01s ease-out',
     zIndex: '1'
 });
-document.body.appendChild(container);
+scrollWrapper.appendChild(container);
 
-// === First Name: William ===
 const firstName = document.createElement('div');
 firstName.textContent = 'William';
 Object.assign(firstName.style, {
@@ -88,7 +89,6 @@ Object.assign(firstName.style, {
     whiteSpace: 'nowrap'
 });
 
-// === Last Name: Nguyen-Luu ===
 const lastName = document.createElement('div');
 lastName.textContent = 'Nguyen-Luu';
 Object.assign(lastName.style, {
@@ -117,7 +117,7 @@ Object.assign(projectsLabel.style, {
     transition: 'opacity 0.5s ease',
     zIndex: '1'
 });
-document.body.appendChild(projectsLabel);
+scrollWrapper.appendChild(projectsLabel);
 
 // === Invisible Nav Bar ===
 const navBar = document.createElement('div');
@@ -133,14 +133,21 @@ Object.assign(navBar.style, {
     opacity: '0',
     transition: 'opacity 0.5s ease',
     zIndex: '1',
-    pointerEvents: 'none' // makes it invisible to cursor clicks
+    pointerEvents: 'none'
 });
 navBar.innerHTML = `
   <span>projects</span>
   <span>work</span>
   <span>about</span>
 `;
-document.body.appendChild(navBar);
+scrollWrapper.appendChild(navBar);
+
+// === Spacer for mobile scroll ===
+if (window.innerWidth < 768) {
+    const spacer = document.createElement('div');
+    spacer.style.height = '300vh';
+    scrollWrapper.appendChild(spacer);
+}
 
 // === Load Fonts ===
 const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
@@ -160,84 +167,4 @@ const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
 notable.load().then(font => {
     document.fonts.add(font);
     projectsLabel.style.fontFamily = 'Notable';
-
 });
-
-
-// === Scroll-Zoom Logic ===
-let scale = 1;
-const maxZoom = 6;
-
-window.addEventListener('wheel', (e) => {
-    scale += e.deltaY * 0.0025;
-    scale = Math.max(1, Math.min(scale, maxZoom));
-    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    updateScene(scale);
-});
-
-if (window.innerWidth < 768) {
-    window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const virtualScale = 1 + scrollTop / 400; // adjust 400 for sensitivity
-        const clampedScale = Math.min(virtualScale, maxZoom);
-        container.style.transform = `translate(-50%, -50%) scale(${clampedScale})`;
-        updateScene(clampedScale);
-    });
-}
-
-// === Scene Transition Logic ===
-function updateScene(scale) {
-    // Fade out name after scale 3
-    if (scale > 3) {
-        const fade = Math.max(0, 1 - (scale - 3) / 2);
-        firstName.style.opacity = fade;
-        lastName.style.opacity = fade;
-    } else {
-        firstName.style.opacity = '1';
-        lastName.style.opacity = '1';
-    }
-    // Fade-in donut image
-    if (scale > 1.5) {
-        video.style.opacity = '1';
-    } else {
-        video.style.opacity = '0';
-    }
-
-    // Slide the black bottom background downward based on scale
-    if (scale > 1 && scale <= 4) {
-        const translateY = Math.min((scale - 1) * 100, 100); // up to 100% of its own height
-        bottomHalf.style.transform = `translateY(${translateY}%)`;
-    } else if (scale > 4) {
-        bottomHalf.style.transform = `translateY(100%)`; // completely off screen
-    } else {
-        bottomHalf.style.transform = `translateY(0%)`; // fully visible
-    }
-
-    // Slide donut image upward into view
-    if (scale > 1 && scale <= 4) {
-        const slidePercent = Math.min((scale - 1) / 3, 1); // 0 → 1
-        const start = 100;  // starts 100vh below
-        const end = 20;     // ends 20vh below (low on screen)
-        const current = start - slidePercent * (start - end);
-        video.style.transform = `translate(-50%, ${current}vh)`;
-    } else if (scale > 4) {
-        video.style.transform = 'translate(-50%, 20vh)';
-    } else {
-        video.style.transform = 'translate(-50%, 100vh)';
-    }
-
-    // Show "Projects" label after scale 4.5
-    if (scale > 4.5) {
-        const alpha = Math.min((scale - 4.5) / 0.5, 1);
-        projectsLabel.style.opacity = alpha;
-    } else {
-        projectsLabel.style.opacity = '0';
-    }
-
-    // Show nav bar after scale 4.5
-    if (scale > 4.5) {
-        navBar.style.opacity = '1';
-    } else {
-        navBar.style.opacity = '0';
-    }
-}
