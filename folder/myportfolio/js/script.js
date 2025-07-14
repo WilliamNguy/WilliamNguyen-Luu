@@ -1,19 +1,9 @@
-// === Scrollable Wrapper ===
-const scrollWrapper = document.createElement('div');
-scrollWrapper.style.position = 'relative';
-scrollWrapper.style.minHeight = '100vh';
-document.body.appendChild(scrollWrapper);
-
 // === Background Setup ===
 document.body.style.margin = '0';
 document.body.style.padding = '0';
+document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
 
-if (window.innerWidth < 768) {
-    document.body.style.overflow = 'auto';
-} else {
-    document.body.style.overflow = 'hidden';
-}
 
 // Top half (white)
 const topHalf = document.createElement('div');
@@ -26,7 +16,7 @@ Object.assign(topHalf.style, {
     backgroundColor: 'white',
     zIndex: '-1'
 });
-scrollWrapper.appendChild(topHalf);
+document.body.appendChild(topHalf);
 
 // Bottom half (black)
 const bottomHalf = document.createElement('div');
@@ -40,14 +30,15 @@ Object.assign(bottomHalf.style, {
     zIndex: '-1',
     transition: 'transform 0.3s ease'
 });
-scrollWrapper.appendChild(bottomHalf);
+document.body.appendChild(bottomHalf);
 
 const video = document.createElement('video');
-video.src = 'assets/videos/Donutreal.mp4';
+video.src = 'assets/videos/Donutreal.mp4'; // 🎥 your looped video path
 video.autoplay = true;
 video.loop = true;
 video.muted = true;
-video.playsInline = true;
+video.playsInline = true; // Important for autoplay on mobile
+
 Object.assign(video.style, {
     position: 'absolute',
     bottom: '0',
@@ -59,9 +50,9 @@ Object.assign(video.style, {
     transition: 'transform 0.5s ease, opacity 0.5s ease',
     zIndex: '-1',
     opacity: '0',
-    objectFit: 'cover'
+    objectFit: 'cover', // ✅ this removes black bars
 });
-scrollWrapper.appendChild(video);
+document.body.appendChild(video);
 
 // === Name Container ===
 const container = document.createElement('div');
@@ -77,8 +68,9 @@ Object.assign(container.style, {
     transition: 'transform 0.01s ease-out',
     zIndex: '1'
 });
-scrollWrapper.appendChild(container);
+document.body.appendChild(container);
 
+// === First Name: William ===
 const firstName = document.createElement('div');
 firstName.textContent = 'William';
 Object.assign(firstName.style, {
@@ -86,9 +78,11 @@ Object.assign(firstName.style, {
     color: 'black',
     fontFamily: 'Lexend',
     margin: '0',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    cursor: 'pointer'
 });
 
+// === Last Name: Nguyen-Luu ===
 const lastName = document.createElement('div');
 lastName.textContent = 'Nguyen-Luu';
 Object.assign(lastName.style, {
@@ -97,11 +91,30 @@ Object.assign(lastName.style, {
     fontFamily: 'BaskerItalic',
     margin: '0',
     marginTop: '18vh',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    cursor: 'pointer'
 });
 
 container.appendChild(firstName);
 container.appendChild(lastName);
+
+[firstName, lastName].forEach(name => {
+    name.addEventListener('click', () => {
+        const target = 5.5;
+        const step = 0.05;
+
+        const zoomInterval = setInterval(() => {
+            if (scale >= target) {
+                clearInterval(zoomInterval);
+            } else {
+                scale += step;
+                scale = Math.min(scale, target);
+                container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                updateScene(scale);
+            }
+        }, 10);
+    });
+});
 
 // === Projects Label ===
 const projectsLabel = document.createElement('div');
@@ -117,7 +130,7 @@ Object.assign(projectsLabel.style, {
     transition: 'opacity 0.5s ease',
     zIndex: '1'
 });
-scrollWrapper.appendChild(projectsLabel);
+document.body.appendChild(projectsLabel);
 
 // === Invisible Nav Bar ===
 const navBar = document.createElement('div');
@@ -133,21 +146,14 @@ Object.assign(navBar.style, {
     opacity: '0',
     transition: 'opacity 0.5s ease',
     zIndex: '1',
-    pointerEvents: 'none'
+    pointerEvents: 'none' // makes it invisible to cursor clicks
 });
 navBar.innerHTML = `
   <span>projects</span>
   <span>work</span>
   <span>about</span>
 `;
-scrollWrapper.appendChild(navBar);
-
-// === Spacer for mobile scroll ===
-if (window.innerWidth < 768) {
-    const spacer = document.createElement('div');
-    spacer.style.height = '300vh';
-    scrollWrapper.appendChild(spacer);
-}
+document.body.appendChild(navBar);
 
 // === Load Fonts ===
 const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
@@ -167,4 +173,74 @@ const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
 notable.load().then(font => {
     document.fonts.add(font);
     projectsLabel.style.fontFamily = 'Notable';
+
 });
+
+
+// === Scroll-Zoom Logic ===
+let scale = 1;
+const maxZoom = 6;
+
+window.addEventListener('wheel', (e) => {
+    scale += e.deltaY * 0.0025;
+    scale = Math.max(1, Math.min(scale, maxZoom));
+    container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    updateScene(scale);
+});
+
+// === Scene Transition Logic ===
+function updateScene(scale) {
+    // Fade out name after scale 3
+    if (scale > 3) {
+        const fade = Math.max(0, 1 - (scale - 3) / 2);
+        firstName.style.opacity = fade;
+        lastName.style.opacity = fade;
+    } else {
+        firstName.style.opacity = '1';
+        lastName.style.opacity = '1';
+    }
+    // Fade-in donut image
+    if (scale > 1.5) {
+        video.style.opacity = '1';
+    } else {
+        video.style.opacity = '0';
+    }
+
+    // Slide the black bottom background downward based on scale
+    if (scale > 1 && scale <= 4) {
+        const translateY = Math.min((scale - 1) * 100, 100); // up to 100% of its own height
+        bottomHalf.style.transform = `translateY(${translateY}%)`;
+    } else if (scale > 4) {
+        bottomHalf.style.transform = `translateY(100%)`; // completely off screen
+    } else {
+        bottomHalf.style.transform = `translateY(0%)`; // fully visible
+    }
+
+    // Slide donut image upward into view
+    if (scale > 1 && scale <= 4) {
+        const slidePercent = Math.min((scale - 1) / 3, 1); // 0 → 1
+        const start = 100;  // starts 100vh below
+        const end = 20;     // ends 20vh below (low on screen)
+        const current = start - slidePercent * (start - end);
+        video.style.transform = `translate(-50%, ${current}vh)`;
+    } else if (scale > 4) {
+        video.style.transform = 'translate(-50%, 20vh)';
+    } else {
+        video.style.transform = 'translate(-50%, 100vh)';
+    }
+
+    // Show "Projects" label after scale 4.5
+    if (scale > 4.5) {
+        const alpha = Math.min((scale - 4.5) / 0.5, 1);
+        projectsLabel.style.opacity = alpha;
+    } else {
+        projectsLabel.style.opacity = '0';
+    }
+
+    // Show nav bar after scale 4.5
+    if (scale > 4.5) {
+        navBar.style.opacity = '1';
+    } else {
+        navBar.style.opacity = '0';
+    }
+}
