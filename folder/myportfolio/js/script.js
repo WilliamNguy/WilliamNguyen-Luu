@@ -138,10 +138,10 @@ document.body.appendChild(projectsLabel);
 const navBar = document.createElement('div');
 Object.assign(navBar.style, {
     position: 'absolute',
-    top: '2vh',
+    top: '4vh',
     right: '3vw',
     display: 'flex',
-    gap: '3vw',
+    gap: '5vw',
     fontSize: '1.5vw',
     color: '#222',
     fontFamily: 'Lexend',
