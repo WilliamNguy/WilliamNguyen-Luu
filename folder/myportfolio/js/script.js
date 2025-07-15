@@ -148,14 +148,24 @@ Object.assign(navBar.style, {
     opacity: '0',
     transition: 'opacity 0.5s ease',
     zIndex: '1',
-    pointerEvents: 'none' // makes it invisible to cursor clicks
+    pointerEvents: 'auto' // makes it invisible to cursor clicks
 });
 navBar.innerHTML = `
-  <span>projects</span>
-  <span>work</span>
-  <span>about</span>
+  <span id="nav-projects" class="nav-item">projects</span>
+  <span id="nav-work" class="nav-item">work</span>
+  <span id="nav-about" class="nav-item">about</span>
 `;
 document.body.appendChild(navBar);
+
+document.getElementById('nav-projects').addEventListener('click', () => {
+    window.location.href = 'projects.html';
+});
+document.getElementById('nav-work').addEventListener('click', () => {
+    window.location.href = 'work.html';
+});
+document.getElementById('nav-about').addEventListener('click', () => {
+    window.location.href = 'about.html';
+});
 
 // === Load Fonts ===
 const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');

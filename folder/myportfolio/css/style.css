@@ -12,3 +12,18 @@ body {
   cursor: none;
   /* Hides the default cursor */
 }
+
+.nav-item {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: #BE5B80;
+  /* Or any color you like */
+}
+
+.nav-item:hover {
+  color: #BE5B80;
+  font-weight: bold;
+}
