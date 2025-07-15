@@ -132,7 +132,13 @@ Object.assign(projectsLabel.style, {
     transition: 'opacity 0.5s ease',
     zIndex: '1'
 });
+projectsLabel.classList.add('nav-item'); // ✅ adds hover effect
+projectsLabel.style.cursor = 'pointer';  // ✅ makes it clickable-looking
 document.body.appendChild(projectsLabel);
+
+projectsLabel.addEventListener('click', () => {
+    window.location.href = 'index.html?zoom=true';
+});
 
 // === Invisible Nav Bar ===
 const navBar = document.createElement('div');
@@ -158,13 +164,13 @@ navBar.innerHTML = `
 document.body.appendChild(navBar);
 
 document.getElementById('nav-projects').addEventListener('click', () => {
-    window.location.href = 'projects.html';
+    window.location.href = 'index1.html';
 });
 document.getElementById('nav-work').addEventListener('click', () => {
-    window.location.href = 'work.html';
+    window.location.href = 'index2.html';
 });
 document.getElementById('nav-about').addEventListener('click', () => {
-    window.location.href = 'about.html';
+    window.location.href = 'index3.html';
 });
 
 // === Load Fonts ===
@@ -255,4 +261,22 @@ function updateScene(scale) {
     } else {
         navBar.style.opacity = '0';
     }
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('zoom') === 'true') {
+    const target = 5.5;
+    const step = 0.05;
+
+    function animateZoom() {
+        if (scale >= target) return;
+
+        scale += step;
+        scale = Math.min(scale, target);
+        container.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        updateScene(scale);
+        requestAnimationFrame(animateZoom);
+    }
+
+    requestAnimationFrame(animateZoom);
 }
