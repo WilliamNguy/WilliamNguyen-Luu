@@ -10,30 +10,46 @@ body {
   font-family: Arial, sans-serif;
   background-color: #ffffff;
   cursor: none;
-  /* Hides the default cursor */
 }
 
+/* Base nav item style */
 .nav-item {
   transition: color 0.3s ease;
   cursor: pointer;
 }
 
-.nav-item:hover {
-  color: #BE5B80;
-  /* Or any color you like */
-}
-
-.nav-item:hover {
-  color: #BE5B80;
-  font-weight: bold;
-}
-
-.nav-item {
-  transition: color 0.3s ease;
-  cursor: pointer;
-}
-
+/* Default hover for all nav items */
 .nav-item:hover {
   color: #73ddd4;
   font-weight: bold;
+}
+
+.projects-page-label {
+  color: #F9E387;
+}
+
+/* Override ONLY for projectsLabel on the projects page */
+.projects-page-label:hover {
+  color: #BE5B80;
+}
+
+.project-grid {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10vw;
+  /* 👈 this adds horizontal space between the images */
+  margin-top: 20vh;
+  margin-left: 25vw;
+}
+
+.project-grid img {
+  width: 20vw;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.project-grid img:hover {
+  transform: scale(1.05);
 }

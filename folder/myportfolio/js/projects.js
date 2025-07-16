@@ -5,17 +5,30 @@ Object.assign(projectsLabel.style, {
     top: '3vh',
     left: '3vw',
     fontSize: '2vw',
-    color: '#BE5B80',
+    // color: '#96CBB0',
     fontFamily: 'Notable',
     cursor: 'pointer',
     zIndex: '1',
     transition: 'opacity 0.5s ease'
 });
-projectsLabel.classList.add('nav-item');
+projectsLabel.classList.add('nav-item', 'projects-page-label');
 projectsLabel.addEventListener('click', () => {
     window.location.href = 'index.html?zoom=true';
 });
 document.body.appendChild(projectsLabel);
+
+const grid = document.createElement('div');
+grid.className = 'project-grid';
+
+const img1 = document.createElement('img');
+img1.src = 'assets/images/Interior_final.png'; // First image
+
+const img2 = document.createElement('img');
+img2.src = 'assets/images/room.png'; // Replace with your second image path
+
+grid.appendChild(img1);
+grid.appendChild(img2);
+document.body.appendChild(grid);
 
 // === Top Nav Bar ===
 const navBar = document.createElement('div');
