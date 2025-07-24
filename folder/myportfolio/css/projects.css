@@ -53,7 +53,7 @@ body {
 /* Image Styling */
 .project-grid img {
     width: 20vw;
-    height: 30vh;
+    height: 28vh;
     object-fit: cover;
     border-radius: 8px;
     transition: transform 0.3s ease;
