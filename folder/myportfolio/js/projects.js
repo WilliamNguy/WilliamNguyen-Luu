@@ -17,17 +17,41 @@ projectsLabel.addEventListener('click', () => {
 });
 document.body.appendChild(projectsLabel);
 
+// === Grid container ===
 const grid = document.createElement('div');
 grid.className = 'project-grid';
 
+// === First row ===
+const row1 = document.createElement('div');
+row1.className = 'project-row';
+
 const img1 = document.createElement('img');
-img1.src = 'assets/images/Interior_final.png'; // First image
+img1.src = 'assets/images/Interior_final.png';
 
 const img2 = document.createElement('img');
-img2.src = 'assets/images/room.png'; // Replace with your second image path
+img2.src = 'assets/images/room.png';
 
-grid.appendChild(img1);
-grid.appendChild(img2);
+row1.appendChild(img1);
+row1.appendChild(img2);
+
+// === Second row ===
+const row2 = document.createElement('div');
+row2.className = 'project-row';
+
+const img3 = document.createElement('img');
+img3.src = 'assets/images/grass.png';
+
+const img4 = document.createElement('img');
+img4.src = 'assets/images/dog.png';
+
+row2.appendChild(img3);
+row2.appendChild(img4);
+
+// Append rows to grid
+grid.appendChild(row1);
+grid.appendChild(row2);
+
+// Append grid to page
 document.body.appendChild(grid);
 
 // === Top Nav Bar ===

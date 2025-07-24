@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    cursor: none;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+}
+
+/* Base nav item style */
+.nav-item {
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Default hover for all nav items */
+.nav-item:hover {
+    color: #73ddd4;
+    font-weight: bold;
+}
+
+.projects-page-label {
+    color: #F9E387;
+}
+
+/* Hover override for label */
+.projects-page-label:hover {
+    color: #BE5B80;
+}
+
+/* Project Grid Layout */
+.project-grid {
+    display: flex;
+    flex-direction: column;
+    /* Stack rows vertically */
+    gap: 10vh;
+    margin-top: 20vh;
+    margin-left: 25vw;
+}
+
+/* Each row of images */
+.project-row {
+    display: flex;
+    gap: 10vw;
+}
+
+/* Image Styling */
+.project-grid img {
+    width: 20vw;
+    height: 30vh;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.project-grid img:hover {
+    transform: scale(1.05);
+}
