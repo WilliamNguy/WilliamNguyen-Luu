@@ -51,8 +51,47 @@ row2.appendChild(img4);
 grid.appendChild(row1);
 grid.appendChild(row2);
 
-// Append grid to page
-document.body.appendChild(grid);
+const row3 = document.createElement('div');
+row3.className = 'project-row';
+
+const video5 = document.createElement('video');
+video5.src = 'assets/videos/Donutreal.mp4';
+// video5.autoplay = true;
+video5.loop = true;
+video5.muted = true;
+video5.playsInline = true;
+
+Object.assign(video5.style, {
+    width: '20vw',
+    height: '30vh',
+    borderRadius: '8px',
+    objectFit: 'cover',
+    transition: 'transform 0.3s ease'
+});
+
+video5.addEventListener('mouseenter', () => {
+    video5.play();
+    video5.style.transform = 'scale(1.05)';
+});
+video5.addEventListener('mouseleave', () => {
+    video5.pause();
+    video5.currentTime = 0;
+    video5.style.transform = 'scale(1)';
+});
+
+row3.appendChild(video5);
+grid.appendChild(row3);
+
+const mainContent = document.createElement('div');
+mainContent.className = 'main-content';
+
+mainContent.appendChild(grid);
+document.body.appendChild(mainContent);
+
+// Create a blur overlay
+const blurOverlay = document.createElement('div');
+blurOverlay.className = 'blur-overlay';
+document.body.insertBefore(blurOverlay, mainContent); // Insert it behind main content
 
 // === Top Nav Bar ===
 const navBar = document.createElement('div');
@@ -83,4 +122,18 @@ document.getElementById('nav-work').addEventListener('click', () => {
 });
 document.getElementById('nav-about').addEventListener('click', () => {
     window.location.href = 'index3.html';
+});
+
+const allMedia = document.querySelectorAll('.project-grid img, .project-grid video');
+
+allMedia.forEach(media => {
+    media.addEventListener('mouseenter', () => {
+        blurOverlay.classList.add('visible');
+        media.style.zIndex = 10;
+    });
+
+    media.addEventListener('mouseleave', () => {
+        blurOverlay.classList.remove('visible');
+        media.style.zIndex = '';
+    });
 });
