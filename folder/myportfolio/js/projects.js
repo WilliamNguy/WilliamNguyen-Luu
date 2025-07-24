@@ -126,14 +126,20 @@ document.getElementById('nav-about').addEventListener('click', () => {
 
 const allMedia = document.querySelectorAll('.project-grid img, .project-grid video');
 
+
 allMedia.forEach(media => {
     media.addEventListener('mouseenter', () => {
         blurOverlay.classList.add('visible');
-        media.style.zIndex = 10;
+
+        // Remove .hovered from all media first
+        allMedia.forEach(m => m.classList.remove('hovered'));
+
+        // Add .hovered only to the current one
+        media.classList.add('hovered');
     });
 
     media.addEventListener('mouseleave', () => {
         blurOverlay.classList.remove('visible');
-        media.style.zIndex = '';
+        media.classList.remove('hovered');
     });
 });

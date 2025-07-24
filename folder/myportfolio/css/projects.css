@@ -63,11 +63,12 @@ body {
     transform: scale(1.05);
 }
 
-/* Enlarge image more and add blur to background on hover */
-.project-grid img:hover,
-.project-grid video:hover {
-    transform: scale(1.15);
+/* Ensures hovered media sits above blur overlay */
+.project-grid img.hovered,
+.project-grid video.hovered {
     z-index: 10;
+    position: relative;
+    /* ensures z-index takes effect */
 }
 
 /* Blur effect when hovering */
@@ -76,7 +77,6 @@ body {
     transition: filter 0.3s ease;
 }
 
-/* Blur overlay behind media */
 .blur-overlay {
     position: fixed;
     top: 0;
@@ -85,6 +85,7 @@ body {
     height: 100vh;
     backdrop-filter: blur(5px);
     z-index: 0;
+    /* Below everything else */
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
