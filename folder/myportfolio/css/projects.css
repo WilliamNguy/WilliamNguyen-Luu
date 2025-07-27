@@ -2,13 +2,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: default;
+    /* cursor: pointer; */
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
-    cursor: default;
+    /* cursor: pointer; */
     overflow-y: auto;
     /* Enable vertical scrolling */
 }
@@ -27,11 +27,15 @@ body {
 
 .projects-page-label {
     color: #BE5B80;
+    transition: color .5s ease;
+    display: inline;
 }
 
 /* Hover override for label */
 .projects-page-label:hover {
     color: #F9E387;
+    font-weight: bold;
+
 }
 
 /* Project Grid Layout */

@@ -5,19 +5,17 @@ Object.assign(projectsLabel.style, {
     top: '3vh',
     left: '3vw',
     fontSize: '2vw',
-    color: '#BE5B80',
     fontFamily: 'Notable',
     cursor: 'pointer',
     zIndex: '1',
     transition: 'opacity 0.5s ease'
 });
-projectsLabel.classList.add('nav-item');
+projectsLabel.classList.add('nav-item', 'projects-page-label');
 projectsLabel.addEventListener('click', () => {
     window.location.href = 'index.html?zoom=true';
 });
 document.body.appendChild(projectsLabel);
 
-// === Top Nav Bar ===
 const navBar = document.createElement('div');
 Object.assign(navBar.style, {
     position: 'absolute',

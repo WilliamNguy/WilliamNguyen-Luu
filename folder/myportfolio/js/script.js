@@ -3,6 +3,8 @@ document.body.style.margin = '0';
 document.body.style.padding = '0';
 document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
+document.body.style.cursor = 'default';
+
 
 // Top half (white)
 const topHalf = document.createElement('div');
@@ -78,7 +80,7 @@ Object.assign(firstName.style, {
     fontFamily: 'Lexend',
     margin: '0',
     whiteSpace: 'nowrap',
-    cursor: 'pointer'
+    cursor: 'default'
 });
 
 // === Last Name: Nguyen-Luu ===
@@ -91,7 +93,7 @@ Object.assign(lastName.style, {
     margin: '0',
     marginTop: '18vh',
     whiteSpace: 'nowrap',
-    cursor: 'pointer'
+    cursor: 'default'
 });
 
 container.appendChild(firstName);
