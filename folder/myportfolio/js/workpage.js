@@ -51,11 +51,13 @@ topBar.appendChild(navBar);
 const videoWrapper = document.createElement('div');
 Object.assign(videoWrapper.style, {
     width: '100vw',
+    height: '100vh',
     backgroundColor: 'black',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '2vh 0' // optional vertical spacing
+    overflow: 'hidden'
+    // padding: '2vh 0'
 });
 document.body.appendChild(videoWrapper);
 
@@ -71,23 +73,27 @@ Object.assign(scrollVideo.style, {
     borderRadius: '12px',
     objectFit: 'cover',
     margin: '30vh',
-    transform: 'scale(1.5)', // ✅ Zoom in 20%
+    transform: 'scale(1.5) translateY(4vh)', // ✅ Zoom in 20%
 });
 
 videoWrapper.appendChild(scrollVideo);
 
 
 // === Scroll-driven video control ===
-let lastScrollTop = window.scrollY;
+
 let isScrolling;
 let rafId;
 
 // Wait until video metadata is loaded
 scrollVideo.addEventListener('loadedmetadata', () => {
-    scrollVideo.currentTime = 0;
-    let lastScrollTop = window.scrollY;
-    let isScrolling;
-    let rafId;
+    scrollVideo.currentTime = 0.25;
+
+    requestAnimationFrame(() => {
+        scrollVideo.currentTime += 0.25; // small nudge to render the frame
+
+        // ✅ Delay scroll tracking until visible frame is shown
+        lastScrollTop = window.scrollY;
+    });
 
     function animate() {
         const currentScroll = window.scrollY;
@@ -104,7 +110,7 @@ scrollVideo.addEventListener('loadedmetadata', () => {
 
         // 🌀 Loop forward or backward
         if (nextTime > scrollVideo.duration) {
-            nextTime = 0;
+            nextTime = 0.25;
         } else if (nextTime < 0) {
             nextTime = scrollVideo.duration;
         }
@@ -182,7 +188,7 @@ imagePaths.forEach(path => {
     img.src = path;
     Object.assign(img.style, {
         width: '30vw',
-        borderRadius: '12px',
+        borderRadius: '0',
         objectFit: 'cover',
         boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
         transition: 'transform 0.3s ease'
