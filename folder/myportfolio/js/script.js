@@ -128,7 +128,7 @@ Object.assign(projectsLabel.style, {
     top: '3vh',
     left: '3vw',
     fontSize: '2vw',
-    color: '#BE5B80',
+    // color: '#BE5B80',
     fontFamily: 'Notable',
     opacity: '0',
     transition: 'opacity 0.5s ease',

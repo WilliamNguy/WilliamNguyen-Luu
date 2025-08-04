@@ -61,6 +61,7 @@ body {
     object-fit: cover;
     border-radius: 8px;
     transition: transform 0.3s ease;
+    cursor: 'pointer';
 }
 
 .project-grid img:hover {
@@ -73,6 +74,10 @@ body {
     z-index: 10;
     position: relative;
     /* ensures z-index takes effect */
+}
+
+.project-grid video {
+    cursor: pointer;
 }
 
 /* Blur effect when hovering */
