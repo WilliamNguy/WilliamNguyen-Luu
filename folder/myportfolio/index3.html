@@ -15,10 +15,37 @@
 
     const basker = new FontFace('BaskerItalic', 'url(assets/fonts/BaskerItalic.ttf)');
     basker.load().then(font => document.fonts.add(font));
+
+    const sans = new FontFace('DmSans', 'url(assets/fonts/DmSans1.ttf)');
+    basker.load().then(font => document.fonts.add(font));
+
+    const newFont = new FontFace('NewFont', 'url(assets/fonts/DmSans1.ttf)');
+    newFont.load().then(font => document.fonts.add(font));
   </script>
 </head>
 
 <body>
+  <div class="about-page">
+    <h1 class="about-heading">About Me</h1>
+
+    <div class="profile-wrapper">
+      <img src="assets/images/me.png" alt="me" class="profile-photo">
+
+      <div class="about-text-box">
+        <p>
+          Hi. I am a Vietnamese student at Concordia University, pursuing a degree in Computation Arts with a focus on
+          3D modeling and animation using Blender. My passion for art began in childhood, nurtured by years of formal
+          art school training, and continues to shape my creative work today.
+          <br><br>
+          I strive to transform imagination into vivid, tangible experiences — blending technical skill with artistic
+          vision. While my primary expertise lies in 3D animation, I am currently expanding my capabilities into video
+          editing and Photoshop, seeking to create multimedia projects that are both visually compelling and
+          conceptually engaging.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script src="js/about.js"></script>
 </body>
 

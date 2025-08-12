@@ -45,3 +45,12 @@ document.getElementById('nav-work').addEventListener('click', () => {
 document.getElementById('nav-about').addEventListener('click', () => {
     window.location.href = 'index3.html';
 });
+
+const horizontalLine = document.createElement('div');
+horizontalLine.className = 'animated-line';
+document.body.appendChild(horizontalLine);
+
+// Trigger the animation after a slight delay
+setTimeout(() => {
+    horizontalLine.classList.add('expand');
+}, 100); // delay to allow DOM paint

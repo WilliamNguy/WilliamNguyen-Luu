@@ -103,3 +103,62 @@ body {
 .blur-overlay.visible {
     opacity: 1;
 }
+
+.about-text-box {
+    position: absolute;
+    top: 50%;
+    left: 20vw;
+    transform: translateY(-50%);
+    width: 30vw;
+    /* background-color: #f9f9f9; */
+    padding: 3vh 2vw;
+    border-radius: 8px;
+    /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
+    font-family: 'NewFont', sans-serif;
+    font-size: 1.2vw;
+    line-height: 1.5;
+}
+
+.profile-wrapper {
+    position: absolute;
+    left: 20vw;
+    top: 60vh;
+    transform: translateY(-50%);
+}
+
+.profile-photo {
+    width: 20vw;
+    top: 60vh;
+    /* border-radius: 8px; */
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-heading {
+    position: absolute;
+    top: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2vw;
+    font-family: 'Lexend', sans-serif;
+    color: #000000;
+    z-index: 10;
+}
+
+.animated-line {
+    position: absolute;
+    top: 25vh;
+    /* adjust vertical position */
+    left: 20vw;
+    /* starting X */
+    height: 2px;
+    width: 0;
+    background-color: #000;
+    transition: width 1s ease-in-out;
+    z-index: 5;
+}
+
+.animated-line.expand {
+    width: 60vw;
+    /* final length */
+}
