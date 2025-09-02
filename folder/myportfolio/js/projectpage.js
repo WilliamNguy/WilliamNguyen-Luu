@@ -63,7 +63,11 @@ Object.assign(videoContainer.style, {
 const videoPaths = [
     'assets/videos/candle.mp4',
     'assets/videos/cool.mp4',
+    'assets/videos/pool.mp4',
+    'assets/videos/grassVideo.mp4',
+    'assets/videos/hair.mp4',
     'assets/videos/Donutreal.mp4'
+
 ];
 
 videoPaths.forEach(src => {
@@ -81,6 +85,14 @@ videoPaths.forEach(src => {
         boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
         transition: 'transform 0.3s ease'
     });
+    if (src.includes('pool.mp4') || src.includes('grassVideo.mp4')) {
+        Object.assign(vid.style, {
+            width: '65vw',       // smaller than before
+            flex: '0 0 65vw',    // still forces its own row
+            margin: '0 auto'     // centers it horizontally
+        });
+    }
+
 
     vid.addEventListener('mouseenter', () => {
         vid.style.transform = 'scale(1.05)';
