@@ -59,9 +59,9 @@ body {
     width: 20vw;
     height: 28vh;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 1px;
     transition: transform 0.3s ease;
-    cursor: 'pointer';
+    cursor: none;
 }
 
 .project-grid img:hover {
@@ -77,7 +77,7 @@ body {
 }
 
 .project-grid video {
-    cursor: pointer;
+    cursor: none;
 }
 
 /* Blur effect when hovering */
@@ -112,7 +112,7 @@ body {
     width: 30vw;
     /* background-color: #f9f9f9; */
     padding: 3vh 2vw;
-    border-radius: 8px;
+    border-radius: 1px;
     /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
     font-family: 'NewFont', sans-serif;
     font-size: 1.2vw;

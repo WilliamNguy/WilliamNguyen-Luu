@@ -42,7 +42,7 @@ Object.assign(navBar.style, {
     pointerEvents: 'auto'
 });
 navBar.innerHTML = `
-  <span id="nav-projects" class="nav-item">projects</span>
+  <span id="nav-projects" class="nav-item">portfolio</span>
   <span id="nav-work" class="nav-item">work</span>
   <span id="nav-about" class="nav-item">about</span>
 `;
@@ -80,7 +80,7 @@ videoPaths.forEach(src => {
 
     Object.assign(vid.style, {
         width: '30vw',
-        borderRadius: '12px',
+        borderRadius: '1px',
         objectFit: 'cover',
         boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
         transition: 'transform 0.3s ease'

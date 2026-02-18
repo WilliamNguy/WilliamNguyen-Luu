@@ -46,7 +46,7 @@ body {
   width: 20vw;
   height: auto;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 1px;
   transition: transform 0.3s ease;
 }
 

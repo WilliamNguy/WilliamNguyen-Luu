@@ -42,7 +42,7 @@ Object.assign(navBar.style, {
     pointerEvents: 'auto'
 });
 navBar.innerHTML = `
-  <span id="nav-projects" class="nav-item">projects</span>
+  <span id="nav-projects" class="nav-item">portfolio</span>
   <span id="nav-work" class="nav-item">work</span>
   <span id="nav-about" class="nav-item">about</span>
 `;
@@ -70,7 +70,7 @@ scrollVideo.playsInline = true;
 
 Object.assign(scrollVideo.style, {
     width: '40vw',
-    borderRadius: '12px',
+    borderRadius: '1px',
     objectFit: 'cover',
     margin: '30vh',
     transform: 'scale(1.5) translateY(4vh)', // ✅ Zoom in 20%
