@@ -99,6 +99,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     row3.appendChild(video5);
 
+    const img6 = document.createElement('img');
+    img6.src = 'assets/images/iteration1.png';
+    img6.addEventListener('click', () => window.location.href = 'project6.html');
+
+    row3.appendChild(img6);
+
     // Assemble grid
     grid.appendChild(row1);
     grid.appendChild(row2);

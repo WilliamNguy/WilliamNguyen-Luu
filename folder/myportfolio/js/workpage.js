@@ -148,14 +148,14 @@ Object.assign(introVideoWrapper.style, {
 });
 
 const introVideo = document.createElement('video');
-introVideo.src = 'assets/videos/candle.mp4'; // replace with actual path
+introVideo.src = 'assets/videos/candle2.mp4'; // replace with actual path
 introVideo.autoplay = true;
 introVideo.loop = true;
 introVideo.muted = true;
 introVideo.playsInline = true;
 
 Object.assign(introVideo.style, {
-    width: '40vw',
+    width: '30vw',
     borderRadius: '0px',
     objectFit: 'cover',
     transform: 'scale(1.1)'
