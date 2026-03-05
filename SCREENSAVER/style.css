@@ -1,0 +1,26 @@
+#screen {
+    width: 800px;
+    height: 500px;
+    margin-top: 20px;
+    background: black;
+    border: 2px solid white;
+}
+
+/* FORCE webcam to stay above all screens */
+#webcam-wrapper {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    height: 150px;
+    z-index: 999999999 !important;
+    border: 2px solid white;
+    background: black;
+    padding: 2px;
+}
+
+#webcam-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}

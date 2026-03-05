@@ -162,3 +162,14 @@ body {
     width: 60vw;
     /* final length */
 }
+
+.unrelated-section {
+    margin-top: 20vh;
+}
+
+.unrelated-title {
+    font-family: 'Lexend', sans-serif;
+    font-size: 1.6vw;
+    margin-bottom: 5vh;
+    text-align: center;
+}

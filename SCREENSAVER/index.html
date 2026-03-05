@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nostalgia Screensaver</title>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+        }
+
+        #screen {
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #mazeCanvas,
+        #morphCanvas,
+        #tunnelCanvas,
+        #starfieldCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        #dvdBox {
+            width: 80px;
+            height: 80px;
+            background: magenta;
+            position: absolute;
+            display: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px magenta;
+            z-index: 10;
+        }
+
+        #scanlines2000s {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+            z-index: 9;
+            background: repeating-linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0.02) 0px,
+                    rgba(0, 0, 0, 0.07) 3px,
+                    rgba(0, 0, 0, 0.07) 6px);
+            animation: scanMove 0.15s linear infinite;
+        }
+
+        #crtGlow2000s {
+            pointer-events: none;
+            z-index: 9;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background:
+                radial-gradient(circle at center,
+                    rgba(255, 255, 255, 0.35) 0%,
+                    rgba(255, 255, 255, 0.18) 20%,
+                    rgba(255, 255, 255, 0.1) 40%,
+                    rgba(0, 0, 0, 0.25) 70%,
+                    rgba(0, 0, 0, 0.9) 100%);
+        }
+
+        @keyframes scanMove {
+            0% {
+                background-position-y: 0px;
+            }
+
+            100% {
+                background-position-y: 6px;
+            }
+        }
+
+        /* ===== OLD-SCHOOL LOADING BAR ===== */
+        #loadingOverlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 8;
+        }
+
+        #loadingBox {
+            background: #000;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 18px #0f0;
+            padding: 18px 28px;
+            text-align: center;
+            font-family: "Courier New", monospace;
+        }
+
+        #loadingText {
+            color: #0f0;
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        #loadingBarOuter {
+            width: 260px;
+            height: 20px;
+            border: 1px solid #0f0;
+            padding: 2px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #loadingBarInner {
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(90deg, #0f0, #bffb00);
+            animation: loadingSweep 1s linear infinite;
+        }
+
+        @keyframes loadingSweep {
+            0% {
+                transform: translateX(-120%);
+            }
+
+            50% {
+                transform: translateX(20%);
+            }
+
+            100% {
+                transform: translateX(120%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>Teachable Machine Image Model</div>
+    <button type="button" onclick="init()">Start</button>
+    <!-- ✅ Freeze / Unfreeze button -->
+    <button type="button" onclick="toggleFreeze()">Freeze</button>
+
+    <div id="webcam-container"></div>
+    <div id="label-container"></div>
+
+    <div id="screen">
+
+        <!-- ✅ Neutral Screen -->
+        <div id="neutralScreen" style="display:none; position:absolute; inset:0; background:black; color:white;
+        font-size:50px; font-family:monospace; 
+        align-items:center; justify-content:center;">
+            NO FACE DETECTED
+        </div>
+        <!-- Smooth Fade Overlay -->
+        <div id="fadeOverlay" style="position:absolute; inset:0; background:black; opacity:0;
+           pointer-events:none; transition:opacity 0.6s linear; z-index:999;">
+        </div>
+
+
+        <div id="scanlines2000s"></div>
+        <div id="crtGlow2000s"></div>
+
+        <!-- ✅ Old-school loading bar (centered) -->
+        <div id="loadingOverlay">
+            <div id="loadingBox">
+                <div id="loadingText">PRESS START TO SCAN</div>
+                <div id="loadingBarOuter">
+                    <div id="loadingBarInner"></div>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="mazeCanvas"></canvas>
+        <canvas id="morphCanvas"></canvas>
+        <canvas id="tunnelCanvas"></canvas>
+        <canvas id="starfieldCanvas"></canvas>
+
+        <div id="dvdBox"></div>
+
+    </div>
+
+
+    <!-- TFJS + TM -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <script>
+        // 
+        // TM MODEL LOADING
+        // 
+        const URL = "./Age Detector Model/";
+
+        let model, webcam, labelContainer, maxPredictions;
+        let currentClass = "";
+
+        // ✅ FREEZE STATE
+        let frozen = false;
+        let frozenImageData = null;
+
+        // ✅ AUDIO FOR 18–30
+        let nos1Audio = null;   // 0–17
+        let nos2Audio = null;   // 18–30
+        let nos3Audio = null;   // 31–50
+        let nos4Audio = null;   // 51+
+
+        // Click SFX for 31–50 sprites
+        let clickSounds = [];
+
+        // Footstep sound for 0–17
+        let walkAudio = null;
+        let walking = false;
+
+
+        function fadeOut(cb) {   // fade to black
+            const f = document.getElementById("fadeOverlay");
+            f.style.opacity = 1;
+            setTimeout(() => cb && cb(), 600); // run callback after fade
+        }
+
+        function fadeIn() {      // fade back in
+            const f = document.getElementById("fadeOverlay");
+            setTimeout(() => {
+                f.style.opacity = 0;
+            }, 50);
+        }
+
+
+        async function init() {
+            // Change loading text while model loads
+            const loadingText = document.getElementById("loadingText");
+            if (loadingText) loadingText.textContent = "LOADING MODEL...";
+
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            webcam = new tmImage.Webcam(200, 200, true);
+            await webcam.setup();
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+
+            // init audio after user interaction (Start click)
+            // Load all audio after user interaction (Start click)
+            if (!nos1Audio) {
+                nos1Audio = new Audio("nos1.mp3");
+                nos1Audio.loop = true;
+                nos1Audio.volume = 0.6;
+            }
+            if (!nos2Audio) {
+                nos2Audio = new Audio("nos2.mp3");
+                nos2Audio.loop = true;
+                nos2Audio.volume = 0.6;
+            }
+            if (!nos3Audio) {
+                nos3Audio = new Audio("nos3.mp3");
+                nos3Audio.loop = true;
+                nos3Audio.volume = 0.6;
+            }
+            if (!nos4Audio) {
+                nos4Audio = new Audio("nos4.mp3");
+                nos4Audio.loop = true;
+                nos4Audio.volume = 0.6;
+            }
+            // Load click SFX for starfield interaction
+            if (clickSounds.length === 0) {
+                const files = ["bump.mp3", "click.mp3", "explosion.mp3"];
+                files.forEach(f => {
+                    const audio = new Audio(f);
+                    audio.volume = 0.8;
+                    clickSounds.push(audio);
+                });
+            }
+            // Load walking sound for maze (0–17)
+            walkAudio = new Audio("walk.mp3");
+            walkAudio.loop = true;
+            walkAudio.volume = 0.7;
+
+
+
+
+            // Hide loading overlay once everything is ready
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            if (loadingOverlay) loadingOverlay.style.display = "none";
+        }
+
+        // ✅ Freeze / Unfreeze
+        function toggleFreeze() {
+            frozen = !frozen;
+
+            if (frozen && webcam && webcam.canvas) {
+                const ctx = webcam.canvas.getContext("2d");
+                frozenImageData = ctx.getImageData(0, 0, webcam.canvas.width, webcam.canvas.height);
+            }
+        }
+
+        async function loop() {
+            if (!webcam) {
+                window.requestAnimationFrame(loop);
+                return;
+            }
+
+            if (!frozen) {
+                // normal mode: update webcam + predict
+                webcam.update();
+                await predict();
+            } else if (frozenImageData) {
+                // frozen mode: keep drawing the captured frame, do NOT re-predict
+                const ctx = webcam.canvas.getContext("2d");
+                ctx.putImageData(frozenImageData, 0, 0);
+            }
+
+            window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            const prediction = await model.predict(webcam.canvas);
+
+            for (let i = 0; i < prediction.length; i++) {
+                labelContainer.childNodes[i].innerHTML =
+                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            }
+
+            let best = prediction[0];
+            for (let i = 1; i < prediction.length; i++) {
+                if (prediction[i].probability > best.probability) best = prediction[i];
+            }
+
+            if (currentClass !== best.className) {
+                currentClass = best.className;
+                updateScreen(currentClass);
+            }
+        }
+
+        // RESET SCREEN STATE
+        let boxActive = false;
+        let tunnelActive = false;
+        let morphActive = false;
+        let mazeActive = false;
+        let starfieldActive = false;
+
+        function resetScreens() {
+            document.getElementById("scanlines2000s").style.display = "none";
+            document.getElementById("crtGlow2000s").style.display = "none";
+
+            document.getElementById("dvdBox").style.display = "none";
+            boxActive = false;
+
+            document.getElementById("tunnelCanvas").style.display = "none";
+            tunnelActive = false;
+
+            document.getElementById("morphCanvas").style.display = "none";
+            morphActive = false;
+
+            document.getElementById("mazeCanvas").style.display = "none";
+            mazeActive = false;
+
+            document.getElementById("starfieldCanvas").style.display = "none";
+            starfieldActive = false;
+
+            document.getElementById("neutralScreen").style.display = "none";
+
+            // reset maze manual flags when leaving it
+            mazeManual = false;
+            mazeMoveForward = mazeMoveBackward = mazeMoveLeft = mazeMoveRight = false;
+
+            // stop 18–30 audio on any switch
+            [nos1Audio, nos2Audio, nos3Audio, nos4Audio].forEach(a => {
+                if (a) a.pause();
+            });
+        }
+
+        // 
+        // 90s DVD Box (currently unused but kept)
+        // 
+        let boxX = 50, boxY = 50;
+        let boxSpeedX = 3, boxSpeedY = 3;
+
+        function animateBox() {
+            if (!boxActive) return;
+
+            const screen = document.getElementById("screen");
+            const box = document.getElementById("dvdBox");
+
+            const sW = screen.clientWidth;
+            const sH = screen.clientHeight;
+            const bW = box.clientWidth;
+            const bH = box.clientHeight;
+
+            boxX += boxSpeedX;
+            boxY += boxSpeedY;
+
+            if (boxX + bW >= sW || boxX <= 0) {
+                boxSpeedX *= -1;
+                randomizeColor();
+            }
+            if (boxY + bH >= sH || boxY <= 0) {
+                boxSpeedY *= -1;
+                randomizeColor();
+            }
+
+            box.style.left = boxX + "px";
+            box.style.top = boxY + "px";
+
+            requestAnimationFrame(animateBox);
+        }
+
+        function randomizeColor() {
+            const box = document.getElementById("dvdBox");
+            const colors = ["magenta", "cyan", "yellow", "lime", "orange", "red", "purple"];
+            const c = colors[Math.floor(Math.random() * colors.length)];
+            box.style.background = c;
+            box.style.boxShadow = `0 0 20px ${c}`;
+        }
+
+        // 80s TUNNEL (51+): 4 tunnels + camera-only rotation
+        let tunnelRenderer, tunnelScene, tunnelCamera, tunnelClock;
+        let tunnelParticles;
+        let tunnelMeshes = [];
+
+        let tunnelRadius = 20;
+        let tunnelMinRadius = 5;
+        let tunnelMaxRadius = 50;
+
+
+        // camera rotation state
+        let tunnelYaw = 0;
+        let tunnelPitch = 0;
+        let tunnelDrag = false;
+        let tunnelLastX = 0, tunnelLastY = 0;
+
+        // intro spin: 180 degrees
+        let tunnelIntro = false;
+        let tunnelIntroRemaining = 0;
+
+        function initTunnel() {
+            const canvas = document.getElementById("tunnelCanvas");
+            const screen = document.getElementById("screen");
+
+            tunnelRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            tunnelRenderer.setSize(screen.clientWidth, screen.clientHeight);
+
+            tunnelScene = new THREE.Scene();
+            tunnelScene.fog = new THREE.FogExp2(0x000000, 0.1);
+
+            tunnelCamera = new THREE.PerspectiveCamera(60, screen.clientWidth / screen.clientHeight, 0.1, 200);
+            tunnelClock = new THREE.Clock();
+
+            // reset camera rotation state
+            tunnelYaw = 0;
+            tunnelPitch = 0;
+            tunnelIntro = true;
+            tunnelIntroRemaining = Math.PI; // 180°
+
+            tunnelMeshes = [];
+
+            // --- create multiple tunnel-like meshes ---
+            const mat1 = new THREE.MeshBasicMaterial({ color: 0x4206F1, wireframe: true });
+            const mat2 = new THREE.MeshBasicMaterial({ color: 0xFE18D3, wireframe: true });
+            const mat3 = new THREE.MeshBasicMaterial({ color: 0xFEFF38, wireframe: true });
+            const mat4 = new THREE.MeshBasicMaterial({ color: 0x41A67E, wireframe: true });
+
+            const g1 = new THREE.TorusGeometry(6, 1, 16, 80);
+            const g2 = new THREE.TorusKnotGeometry(4, 0.8, 120, 16);
+            const g3 = new THREE.TorusGeometry(8, 0.6, 24, 120);
+            const g4 = new THREE.TorusGeometry(10, 0.3, 32, 160);
+
+            const m1 = new THREE.Mesh(g1, mat1);
+            const m2 = new THREE.Mesh(g2, mat2);
+            const m3 = new THREE.Mesh(g3, mat3);
+            const m4 = new THREE.Mesh(g4, mat4);
+
+            m1.position.z = 0;
+            m2.position.z = -8;
+            m3.position.z = -16;
+            m4.position.z = -24;
+
+            tunnelScene.add(m1, m2, m3, m4);
+            tunnelMeshes.push(m1, m2, m3, m4);
+
+            // --- particles running through tunnels ---
+            const pGeo = new THREE.BufferGeometry();
+            const count = 800;
+            const pos = new Float32Array(count * 3);
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 12 + Math.random() * 8;
+                const z = (Math.random() - 0.5) * 50;
+                pos[i * 3] = Math.cos(angle) * radius;
+                pos[i * 3 + 1] = Math.sin(angle) * radius;
+                pos[i * 3 + 2] = z;
+            }
+            pGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+            const pMat = new THREE.PointsMaterial({ size: 0.12, color: 0xffffff });
+            tunnelParticles = new THREE.Points(pGeo, pMat);
+            tunnelScene.add(tunnelParticles);
+
+            animateTunnel();
+        }
+
+        function animateTunnel() {
+            if (!tunnelActive) return;
+            requestAnimationFrame(animateTunnel);
+
+            const delta = tunnelClock.getDelta();
+
+            // rotate all tunnel meshes with slightly different speeds
+            tunnelMeshes.forEach((mesh, i) => {
+                mesh.rotation.x += 0.002 + i * 0.0008;
+                mesh.rotation.y += 0.003 + i * 0.001;
+            });
+
+            if (tunnelParticles) {
+                tunnelParticles.rotation.z -= 0.0008;
+            }
+
+            // camera orbit: intro + drag-based
+            if (tunnelIntro && tunnelIntroRemaining > 0) {
+                const spinSpeed = Math.PI / 2; // 90° per second
+                const step = spinSpeed * delta;
+                tunnelYaw += step;
+                tunnelIntroRemaining -= step;
+                if (tunnelIntroRemaining <= 0) {
+                    tunnelIntro = false;
+                }
+            }
+
+            // ⬇⬇⬇ FIXED: use tunnelRadius instead of constant 20
+            const eyeX = Math.sin(tunnelYaw) * tunnelRadius;
+            const eyeZ = Math.cos(tunnelYaw) * tunnelRadius;
+            const eyeY = 2 + Math.sin(tunnelPitch) * 6;
+
+            tunnelCamera.position.set(eyeX, eyeY, eyeZ);
+            tunnelCamera.lookAt(0, 0, -10);
+
+            tunnelRenderer.render(tunnelScene, tunnelCamera);
+        }
+
+
+        // 2000s — Morphing Cube (mouse draggable) 18–30
+
+        let morphRenderer, morphScene, morphCamera, morphMesh, morphClock;
+        let morphDrag = false;
+        let morphLastX = 0, morphLastY = 0;
+
+        function initMorph() {
+            const canvas = document.getElementById("morphCanvas");
+            const screen = document.getElementById("screen");
+
+            morphRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            morphRenderer.setSize(screen.clientWidth, screen.clientHeight);
+
+            morphScene = new THREE.Scene();
+            morphCamera = new THREE.PerspectiveCamera(45, screen.clientWidth / screen.clientHeight, 0.1, 100);
+            morphCamera.position.z = 4;
+
+            morphClock = new THREE.Clock();
+
+            const segments = 20;
+            const baseGeom = new THREE.BoxGeometry(2, 2, 2, segments, segments, segments);
+            const basePos = baseGeom.attributes.position;
+
+            const squarePos = basePos.clone();
+            for (let i = 0; i < squarePos.count; i++) squarePos.setY(i, 0);
+
+            const spherePos = basePos.clone();
+            const temp = new THREE.Vector3();
+            for (let i = 0; i < spherePos.count; i++) {
+                temp.fromBufferAttribute(basePos, i).normalize().multiplyScalar(1.2);
+                spherePos.setXYZ(i, temp.x, temp.y, temp.z);
+            }
+
+            baseGeom.morphAttributes.position = [squarePos, spherePos];
+
+            const mat = new THREE.MeshNormalMaterial({ morphTargets: true });
+            morphMesh = new THREE.Mesh(baseGeom, mat);
+            morphScene.add(morphMesh);
+
+            animateMorph();
+        }
+
+        function animateMorph() {
+            if (!morphActive) return;
+            requestAnimationFrame(animateMorph);
+
+            const t = morphClock.getElapsedTime();
+
+            morphMesh.morphTargetInfluences[0] = Math.max(0, Math.sin(t));
+            morphMesh.morphTargetInfluences[1] = Math.max(0, Math.sin(t - Math.PI / 2));
+
+            // Auto-rotate only when NOT dragging
+            if (!morphDrag) {
+                morphMesh.rotation.y += 0.005;
+                morphMesh.rotation.x += 0.003;
+            }
+
+            morphRenderer.render(morphScene, morphCamera);
+        }
+
+        // 0–17 — 3D MAZE (auto-follow + manual WASD/mouse)
+        let mazeRenderer, mazeScene, mazeCamera, mazeClock;
+        let mazePath = [], mazeSize = 10, cellSize = 4, mazeIndex = 0;
+
+        // manual control state
+        let mazeManual = false;
+        let mazeYaw = 0;
+        let mazePitch = 0;
+        let mazeMoveForward = false;
+        let mazeMoveBackward = false;
+        let mazeMoveLeft = false;
+        let mazeMoveRight = false;
+        let mazeLastMouseX = 0;
+        let mazeLastMouseY = 0;
+
+
+        function generateMaze(width, height) {
+            const maze = Array.from({ length: width }, () =>
+                Array.from({ length: height }, () => ({ visited: false, walls: [true, true, true, true] }))
+            );
+
+            const path = [];
+
+            function carve(x, y) {
+                maze[x][y].visited = true;
+                path.push([x, y]);
+
+                const dirs = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+
+                for (let dir of dirs) {
+                    let nx = x, ny = y;
+                    if (dir === 0) ny--;
+                    else if (dir === 1) nx++;
+                    else if (dir === 2) ny++;
+                    else if (dir === 3) nx--;
+
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height && !maze[nx][ny].visited) {
+                        maze[x][y].walls[dir] = false;
+                        maze[nx][ny].walls[(dir + 2) % 4] = false;
+                        carve(nx, ny);
+                    }
+                }
+            }
+
+            carve(0, 0);
+            return { maze, path };
+        }
+
+        let mazeData;
+
+        function initMaze() {
+            const canvas = document.getElementById("mazeCanvas");
+            const screen = document.getElementById("screen");
+
+            mazeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            mazeRenderer.setSize(screen.clientWidth, screen.clientHeight);
+
+            mazeScene = new THREE.Scene();
+            mazeCamera = new THREE.PerspectiveCamera(75, screen.clientWidth / screen.clientHeight, 0.1, 1000);
+            mazeCamera.position.y = 2;
+
+            mazeClock = new THREE.Clock();
+
+            mazeData = generateMaze(mazeSize, mazeSize);
+            const { maze, path } = mazeData;
+            mazePath = path;
+            mazeIndex = 0;
+
+            const loader = new THREE.TextureLoader();
+
+            // -----------------------------
+            //  LOAD ALL WALL TEXTURES
+            // -----------------------------
+            const wallTextures = [
+                loader.load("wall.jpg"),
+                loader.load("girl.jpg"),
+                loader.load("boy.jpeg")
+            ];
+
+            wallTextures.forEach(tex => {
+                tex.wrapS = THREE.RepeatWrapping;
+                tex.wrapT = THREE.RepeatWrapping;
+                tex.repeat.set(1, 1);
+            });
+
+            // random material generator
+            function randomWallMaterial() {
+                const tex = wallTextures[Math.floor(Math.random() * wallTextures.length)];
+                return new THREE.MeshBasicMaterial({ map: tex });
+            }
+
+            // -----------------------------
+            // FLOOR + CEILING
+            // -----------------------------
+            const floorTexture = loader.load("floor.jpg");
+            floorTexture.wrapS = THREE.RepeatWrapping;
+            floorTexture.wrapT = THREE.RepeatWrapping;
+            floorTexture.repeat.set(mazeSize, mazeSize);
+
+            const ceilingTexture = loader.load("ceiling.jpg");
+            ceilingTexture.wrapS = THREE.RepeatWrapping;
+            ceilingTexture.wrapT = THREE.RepeatWrapping;
+            ceilingTexture.repeat.set(mazeSize, mazeSize);
+
+            const floorMat = new THREE.MeshBasicMaterial({ map: floorTexture });
+            const ceilMat = new THREE.MeshBasicMaterial({
+                map: ceilingTexture,
+                side: THREE.DoubleSide
+            });
+
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(mazeSize * cellSize, mazeSize * cellSize), floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            mazeScene.add(floor);
+
+            const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(mazeSize * cellSize, mazeSize * cellSize), ceilMat);
+            ceiling.rotation.x = Math.PI / 2;
+            ceiling.position.y = cellSize;
+            mazeScene.add(ceiling);
+
+            // WALLS   (now random)
+            for (let x = 0; x < mazeSize; x++) {
+                for (let y = 0; y < mazeSize; y++) {
+                    const cell = maze[x][y];
+                    const cx = (x - mazeSize / 2) * cellSize + cellSize / 2;
+                    const cz = (y - mazeSize / 2) * cellSize + cellSize / 2;
+                    const hw = cellSize / 2;
+                    const h = cellSize;
+
+                    // North wall
+                    if (cell.walls[0]) {
+                        const w = new THREE.Mesh(new THREE.BoxGeometry(cellSize, h, 0.2), randomWallMaterial());
+                        w.position.set(cx, h / 2, cz - hw);
+                        mazeScene.add(w);
+                    }
+
+                    // East wall
+                    if (cell.walls[1]) {
+                        const w = new THREE.Mesh(new THREE.BoxGeometry(0.2, h, cellSize), randomWallMaterial());
+                        w.position.set(cx + hw, h / 2, cz);
+                        mazeScene.add(w);
+                    }
+
+                    // South wall
+                    if (cell.walls[2]) {
+                        const w = new THREE.Mesh(new THREE.BoxGeometry(cellSize, h, 0.2), randomWallMaterial());
+                        w.position.set(cx, h / 2, cz + hw);
+                        mazeScene.add(w);
+                    }
+
+                    // West wall
+                    if (cell.walls[3]) {
+                        const w = new THREE.Mesh(new THREE.BoxGeometry(0.2, h, cellSize), randomWallMaterial());
+                        w.position.set(cx - hw, h / 2, cz);
+                        mazeScene.add(w);
+                    }
+                }
+            }
+
+            // reset control states
+            mazeManual = false;
+            mazeMoveForward = mazeMoveBackward = mazeMoveLeft = mazeMoveRight = false;
+            mazeYaw = 0;
+            mazePitch = 0;
+
+            animateMaze();
+        }
+
+
+        function animateMaze() {
+            if (!mazeManual) {
+                // stop walking if exiting manual mode
+                updateWalkingSound();
+            }
+
+            if (!mazeActive) return;
+            requestAnimationFrame(animateMaze);
+
+            const delta = mazeClock.getDelta();
+
+            if (!mazeManual) {
+                //  AUTO-PATH MODE 
+                const [x, y] = mazePath[mazeIndex];
+                const tx = (x - mazeSize / 2) * cellSize + cellSize / 2;
+                const tz = (y - mazeSize / 2) * cellSize + cellSize / 2;
+
+                const dx = tx - mazeCamera.position.x;
+                const dz = tz - mazeCamera.position.z;
+                const dist = Math.sqrt(dx * dx + dz * dz);
+
+                if (dist < 0.05) {
+                    mazeIndex = (mazeIndex + 1) % mazePath.length;
+                } else {
+                    const speed = delta * 2;
+                    mazeCamera.position.x += (dx / dist) * speed;
+                    mazeCamera.position.z += (dz / dist) * speed;
+
+                    mazeCamera.lookAt(new THREE.Vector3(tx, 2, tz));
+                }
+            } else {
+                //  MANUAL FPS-LIKE MODE 
+                const moveSpeed = 4 * delta;
+
+                // forward direction from yaw
+                const forward = new THREE.Vector3(
+                    Math.sin(mazeYaw),
+                    0,
+                    Math.cos(mazeYaw)
+                );
+                const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+                if (mazeMoveForward) mazeCamera.position.addScaledVector(forward, moveSpeed);
+                if (mazeMoveBackward) mazeCamera.position.addScaledVector(forward, -moveSpeed);
+                if (mazeMoveLeft) mazeCamera.position.addScaledVector(right, -moveSpeed);
+                if (mazeMoveRight) mazeCamera.position.addScaledVector(right, moveSpeed);
+
+                const lookDir = forward.clone();
+                lookDir.y = Math.sin(mazePitch);
+
+                const target = mazeCamera.position.clone().add(lookDir);
+                mazeCamera.lookAt(target);
+            }
+            if (mazeManual) {
+                const moveSpeed = 4 * delta;
+
+                const forward = new THREE.Vector3(
+                    Math.sin(mazeYaw),
+                    0,
+                    Math.cos(mazeYaw)
+                );
+                const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+
+                if (mazeMoveForward) mazeCamera.position.addScaledVector(forward, moveSpeed);
+                if (mazeMoveBackward) mazeCamera.position.addScaledVector(forward, -moveSpeed);
+                if (mazeMoveLeft) mazeCamera.position.addScaledVector(right, -moveSpeed);
+                if (mazeMoveRight) mazeCamera.position.addScaledVector(right, moveSpeed);
+
+                const lookDir = forward.clone();
+                lookDir.y = Math.sin(mazePitch);
+                mazeCamera.lookAt(mazeCamera.position.clone().add(lookDir));
+
+                //Update walking sound
+                updateWalkingSound();
+            }
+
+
+            mazeRenderer.render(mazeScene, mazeCamera);
+        }
+        function updateWalkingSound() {
+            if (!mazeActive || !mazeManual) {
+                if (walkAudio) walkAudio.pause();
+                walking = false;
+                return;
+            }
+
+            const moving = mazeMoveForward || mazeMoveBackward || mazeMoveLeft || mazeMoveRight;
+
+            if (moving && !walking) {
+                walking = true;
+                walkAudio.currentTime = 0;
+                walkAudio.play().catch(() => { });
+            }
+            else if (!moving && walking) {
+                walking = false;
+                walkAudio.pause();
+            }
+        }
+        window.addEventListener("keydown", (e) => {
+            if (!tunnelActive) return;
+
+            const zoomSpeed = 1.0;
+
+            if (e.code === "ArrowUp") {
+                tunnelRadius -= zoomSpeed;
+            }
+            if (e.code === "ArrowDown") {
+                tunnelRadius += zoomSpeed;
+            }
+
+            // clamp limits
+            if (tunnelRadius < tunnelMinRadius) tunnelRadius = tunnelMinRadius;
+            if (tunnelRadius > tunnelMaxRadius) tunnelRadius = tunnelMaxRadius;
+        });
+
+
+        // 
+        // 31–50 STARFIELD WITH SPRITES
+
+        let sfRenderer, sfScene, sfCamera, sfStars, sfGeometry;
+
+        let sfSpaceman = null;
+        let sfAstro = null;
+        let sfMilk = null;
+        let sfPiece = null;
+        let sfBlue = null;
+        let sfPurple = null;
+
+        let sfSpacemanNDC = new THREE.Vector2(0, 0);
+        let sfAstroNDC = new THREE.Vector2(0, 0);
+
+        let sfSpacemanVel = new THREE.Vector2(0.002, 0.0015);
+        let sfAstroVel = new THREE.Vector2(-0.0008, -0.0002);
+
+        // Mouse interaction helpers (for 31–50 and 18–30 + 0–17 + 51+)
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let dragSprite = null;
+        let dragDistance = 0;
+
+        function initStarfield() {
+            const canvas = document.getElementById("starfieldCanvas");
+            const screen = document.getElementById("screen");
+
+            sfRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            sfRenderer.setSize(screen.clientWidth, screen.clientHeight);
+
+            sfScene = new THREE.Scene();
+            sfCamera = new THREE.PerspectiveCamera(75, screen.clientWidth / screen.clientHeight, 0.1, 1000);
+            sfCamera.position.z = 5;
+
+            const starCount = 1500;
+            const pos = [];
+
+            for (let i = 0; i < starCount; i++) {
+                pos.push(
+                    (Math.random() - 0.5) * 200,
+                    (Math.random() - 0.5) * 200,
+                    -Math.random() * 500
+                );
+            }
+
+            sfGeometry = new THREE.BufferGeometry();
+            sfGeometry.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 1.5,
+                transparent: true,
+                opacity: 1.0,
+                map: sfCircleTexture(),
+                alphaTest: 0.01
+            });
+
+            sfStars = new THREE.Points(sfGeometry, material);
+            sfScene.add(sfStars);
+
+            const loader = new THREE.TextureLoader();
+
+            loader.load("spaceman.png", tex => {
+                const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+                sfSpaceman = new THREE.Sprite(mat);
+                sfSpaceman.scale.set(0.1, 0.1, 1);
+                sfSpacemanNDC.set(Math.random() * 2 - 1, Math.random() * 2 - 1);
+                sfScene.add(sfSpaceman);
+            });
+
+            const sfMilkVid = document.createElement("video");
+            sfMilkVid.src = "milk.webm";
+            sfMilkVid.loop = true;
+            sfMilkVid.muted = true;
+            sfMilkVid.play();
+
+            const sfMilkTex = new THREE.VideoTexture(sfMilkVid);
+            const sfMilkMat = new THREE.SpriteMaterial({ map: sfMilkTex, transparent: true });
+            sfMilk = new THREE.Sprite(sfMilkMat);
+            sfMilk.scale.set(2.5, 2.5, 1);
+            sfMilk.position.set(2.5, 2, 0);
+            sfScene.add(sfMilk);
+
+            const sfAstroVid = document.createElement("video");
+            sfAstroVid.src = "astro.webm";
+            sfAstroVid.loop = true;
+            sfAstroVid.muted = true;
+            sfAstroVid.play();
+
+            const sfAstroTex = new THREE.VideoTexture(sfAstroVid);
+            const sfAstroMat = new THREE.SpriteMaterial({ map: sfAstroTex, transparent: true });
+
+            sfAstro = new THREE.Sprite(sfAstroMat);
+            sfAstro.scale.set(0.1, 0.1, 1);
+            sfAstroNDC.set(Math.random() * 2 - 1, Math.random() * 2 - 1);
+            sfScene.add(sfAstro);
+
+            const sfPieceVid = document.createElement("video");
+            sfPieceVid.src = "piece.webm";
+            sfPieceVid.loop = true;
+            sfPieceVid.muted = true;
+            sfPieceVid.play();
+
+            const sfPieceTex = new THREE.VideoTexture(sfPieceVid);
+            const sfPieceMat = new THREE.SpriteMaterial({ map: sfPieceTex, transparent: true });
+
+            sfPiece = new THREE.Sprite(sfPieceMat);
+            sfPiece.scale.set(1.8, 1.8, 1);
+            sfPiece.position.set(-2, -1, 0);
+            sfScene.add(sfPiece);
+
+            loader.load("blue.png", tex => {
+                const m = new THREE.SpriteMaterial({ map: tex, transparent: true });
+                sfBlue = new THREE.Sprite(m);
+                sfBlue.scale.set(7, 7, 1);
+                sfBlue.position.set(3, -2, 0);
+                sfScene.add(sfBlue);
+            });
+
+            loader.load("purple.png", tex => {
+                const m = new THREE.SpriteMaterial({ map: tex, transparent: true });
+                sfPurple = new THREE.Sprite(m);
+                sfPurple.scale.set(6, 6, 1);
+                sfPurple.position.set(-6, 3.2, 0);
+                sfScene.add(sfPurple);
+            });
+
+            animateStarfield();
+        }
+
+        function animateStarfield() {
+            if (!starfieldActive) return;
+            requestAnimationFrame(animateStarfield);
+
+            const arr = sfGeometry.attributes.position.array;
+            for (let i = 2; i < arr.length; i += 3) {
+                arr[i] += 0.4;
+                if (arr[i] > 5) {
+                    arr[i] = -500;
+                    arr[i - 2] = (Math.random() - 0.5) * 200;
+                    arr[i - 1] = (Math.random() - 0.5) * 200;
+                }
+            }
+            sfGeometry.attributes.position.needsUpdate = true;
+
+            // Only bounce if NOT dragging that sprite
+            if (sfSpaceman && dragSprite !== sfSpaceman) {
+                sfSpacemanNDC.add(sfSpacemanVel);
+                if (sfSpacemanNDC.x > 1 || sfSpacemanNDC.x < -1) sfSpacemanVel.x *= -1;
+                if (sfSpacemanNDC.y > 1 || sfSpacemanNDC.y < -1) sfSpacemanVel.y *= -1;
+                sfUpdateSprite(sfSpaceman, sfSpacemanNDC);
+            }
+
+            if (sfAstro && dragSprite !== sfAstro) {
+                sfAstroNDC.add(sfAstroVel);
+                if (sfAstroNDC.x > 1 || sfAstroNDC.x < -1) sfAstroVel.x *= -1;
+                if (sfAstroNDC.y > 1 || sfAstroNDC.y < -1) sfAstroVel.y *= -1;
+                sfUpdateSprite(sfAstro, sfAstroNDC);
+            }
+
+            sfRenderer.render(sfScene, sfCamera);
+        }
+
+        function sfUpdateSprite(sprite, ndcVec) {
+            const world = new THREE.Vector3(ndcVec.x, ndcVec.y, 0.5).unproject(sfCamera);
+            sprite.position.copy(world);
+        }
+
+        function sfCircleTexture() {
+            const size = 64;
+            const canvas = document.createElement("canvas");
+            canvas.width = canvas.height = size;
+            const ctx = canvas.getContext("2d");
+
+            const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+            g.addColorStop(0, "white");
+            g.addColorStop(1, "transparent");
+
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            return new THREE.CanvasTexture(canvas);
+        }
+        function playRandomClickSound() {
+            if (clickSounds.length === 0) return;
+
+            const sfx = clickSounds[Math.floor(Math.random() * clickSounds.length)];
+            sfx.currentTime = 0;
+            sfx.play().catch(() => { });
+        }
+
+        // MOUSE + KEYBOARD INTERACTION
+        // (31–50 sprites, 18–30 cube, 0–17 maze, 51+ tunnel)
+        const screenDiv = document.getElementById("screen");
+
+        screenDiv.addEventListener("mousedown", onMouseDown);
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mouseup", onMouseUp);
+
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("keyup", onKeyUp);
+
+        function updateMouseFromEvent(event) {
+            const rect = screenDiv.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        }
+
+        function onMouseDown(event) {
+            // 0–17: first click → enable manual mze control
+            if (mazeActive) {
+                if (!mazeManual) {
+                    mazeManual = true; // stop auto mode
+                }
+                mazeLastMouseX = event.clientX;
+                mazeLastMouseY = event.clientY;
+            }
+
+            // 51+ : tunnel camera rotation start drag
+            if (tunnelActive && tunnelCamera) {
+                tunnelDrag = true;
+                tunnelLastX = event.clientX;
+                tunnelLastY = event.clientY;
+                tunnelIntro = false; // stop intro spin once user touches it
+            }
+
+            // 31–50: Starfield sprite dragging
+            if (starfieldActive && sfCamera && sfScene) {
+                updateMouseFromEvent(event);
+                raycaster.setFromCamera(mouse, sfCamera);
+
+                const sprites = [sfSpaceman, sfAstro, sfMilk, sfPiece, sfBlue, sfPurple].filter(Boolean);
+                const intersects = raycaster.intersectObjects(sprites, false);
+
+                if (intersects.length > 0) {
+                    dragSprite = intersects[0].object;
+                    dragDistance = intersects[0].distance;
+
+                    // 🎵 Play random click sound
+                    playRandomClickSound();
+
+                    return;
+                }
+            }
+
+
+            // 18–30: Morph cube dragging
+            if (morphActive && morphMesh) {
+                morphDrag = true;
+                morphLastX = event.clientX;
+                morphLastY = event.clientY;
+            }
+        }
+
+        function onMouseMove(event) {
+            // 31–50: dragging sprites
+            if (dragSprite && starfieldActive && sfCamera) {
+                updateMouseFromEvent(event);
+                raycaster.setFromCamera(mouse, sfCamera);
+                const newPos = raycaster.ray.origin.clone()
+                    .add(raycaster.ray.direction.clone().multiplyScalar(dragDistance));
+                dragSprite.position.copy(newPos);
+
+                // keep NDC in sync for bouncing sprites
+                const projected = dragSprite.position.clone().project(sfCamera);
+                if (dragSprite === sfSpaceman) {
+                    sfSpacemanNDC.set(projected.x, projected.y);
+                } else if (dragSprite === sfAstro) {
+                    sfAstroNDC.set(projected.x, projected.y);
+                }
+            }
+
+            // 18–30: morph cube drag rotation
+            if (morphDrag && morphMesh && morphActive) {
+                const dx = event.clientX - morphLastX;
+                const dy = event.clientY - morphLastY;
+
+                morphMesh.rotation.y += dx * 0.01;
+                morphMesh.rotation.x += dy * 0.01;
+
+                morphLastX = event.clientX;
+                morphLastY = event.clientY;
+            }
+
+            // 0–17: maze mouse-look in manual mode
+            if (mazeActive && mazeManual && mazeCamera) {
+                const dx = event.clientX - mazeLastMouseX;
+                const dy = event.clientY - mazeLastMouseY;
+
+                const sensitivity = 0.004;
+                mazeYaw -= dx * sensitivity;
+                mazePitch -= dy * sensitivity;
+
+                const limit = Math.PI / 3;
+                if (mazePitch > limit) mazePitch = limit;
+                if (mazePitch < -limit) mazePitch = -limit;
+
+                mazeLastMouseX = event.clientX;
+                mazeLastMouseY = event.clientY;
+            }
+
+            // 51+: tunnel camera rotation with mouse
+            if (tunnelActive && tunnelDrag && tunnelCamera) {
+                const dx = event.clientX - tunnelLastX;
+                const dy = event.clientY - tunnelLastY;
+
+                const sensitivity = 0.004;
+                tunnelYaw -= dx * sensitivity;
+                tunnelPitch -= dy * sensitivity;
+
+                const limit = Math.PI / 3;
+                if (tunnelPitch > limit) tunnelPitch = limit;
+                if (tunnelPitch < -limit) tunnelPitch = -limit;
+
+                tunnelLastX = event.clientX;
+                tunnelLastY = event.clientY;
+            }
+        }
+
+        function onMouseUp() {
+            dragSprite = null;
+            morphDrag = false;
+            tunnelDrag = false;
+        }
+
+        function onKeyDown(e) {
+
+            // Escape resets maze auto mode
+            if (e.code === "Escape") {
+                mazeManual = false;
+            }
+
+            //  TUNNEL ZOOM (51+) 
+            if (tunnelActive) {
+                const zoomSpeed = 1.0;
+
+                if (e.code === "ArrowUp") {
+                    tunnelRadius -= zoomSpeed;
+                }
+                if (e.code === "ArrowDown") {
+                    tunnelRadius += zoomSpeed;
+                }
+
+                tunnelRadius = Math.max(tunnelMinRadius, Math.min(tunnelMaxRadius, tunnelRadius));
+                return; // prevent WASD from triggering
+            }
+
+            //  MAZE MOVEMENT (0–17) 
+            if (!mazeActive || !mazeManual) return;
+
+            if (e.code === "KeyW") mazeMoveForward = true;
+            if (e.code === "KeyS") mazeMoveBackward = true;
+            if (e.code === "KeyA") mazeMoveLeft = true;
+            if (e.code === "KeyD") mazeMoveRight = true;
+        }
+
+        function onKeyUp(e) {
+            if (!mazeActive || !mazeManual) return;
+
+            if (e.code === "KeyW") mazeMoveForward = false;
+            if (e.code === "KeyS") mazeMoveBackward = false;
+            if (e.code === "KeyA") mazeMoveLeft = false;
+            if (e.code === "KeyD") mazeMoveRight = false;
+        }
+
+        // 
+        // SCREEN SWITCHING
+        // 
+        function updateScreen(cls) {
+
+            fadeOut(() => {
+
+                resetScreens();
+
+                switch (cls) {
+                    case "0-17":
+                        document.getElementById("mazeCanvas").style.display = "block";
+                        mazeActive = true;
+                        initMaze();
+
+                        if (nos1Audio) {
+                            nos1Audio.currentTime = 0;
+                            nos1Audio.play().catch(() => { });
+                        }
+                        break;
+
+                    case "18-30":
+                        document.getElementById("morphCanvas").style.display = "block";
+                        document.getElementById("scanlines2000s").style.display = "block";
+                        document.getElementById("crtGlow2000s").style.display = "block";
+                        morphActive = true;
+                        initMorph();
+
+                        if (nos2Audio) {
+                            nos2Audio.currentTime = 0;
+                            nos2Audio.play().catch(() => { });
+                        }
+                        break;
+
+                    case "31-50":
+                        document.getElementById("starfieldCanvas").style.display = "block";
+                        starfieldActive = true;
+                        initStarfield();
+
+                        if (nos3Audio) {
+                            nos3Audio.currentTime = 0;
+                            nos3Audio.play().catch(() => { });
+                        }
+                        break;
+
+                    case "51+":
+                        document.getElementById("tunnelCanvas").style.display = "block";
+                        tunnelActive = true;
+                        initTunnel();
+
+                        if (nos4Audio) {
+                            nos4Audio.currentTime = 0;
+                            nos4Audio.play().catch(() => { });
+                        }
+                        break;
+
+                    case "Neutral":
+                        document.getElementById("neutralScreen").style.display = "flex";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                fadeIn();
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

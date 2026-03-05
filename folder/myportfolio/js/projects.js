@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     Object.assign(video5.style, {
         width: '20vw',
-        height: '30vh',
+        height: '28vh',
         borderRadius: '1px',
         objectFit: 'cover',
         transition: 'transform 0.3s ease'
@@ -114,6 +114,61 @@ window.addEventListener('DOMContentLoaded', () => {
     mainContent.className = 'main-content';
     mainContent.appendChild(grid);
     document.body.appendChild(mainContent);
+
+    // =============================
+    // Unrelated projects section
+    // =============================
+
+    const unrelatedSection = document.createElement('div');
+    unrelatedSection.className = 'unrelated-section';
+
+    const unrelatedTitle = document.createElement('div');
+    unrelatedTitle.className = 'unrelated-title';
+    unrelatedTitle.textContent = 'Unrelated Projects';
+
+    const unrelatedGrid = document.createElement('div');
+    unrelatedGrid.className = 'project-grid'; // reuse same grid styling
+
+    // -------- Unrelated Row 1 --------
+    const uRow1 = document.createElement('div');
+    uRow1.className = 'project-row';
+
+    const uImg1 = document.createElement('img');
+    uImg1.src = 'assets/images/unrelated1.png';
+    uImg1.addEventListener('click', () => window.location.href = 'unrelated1.html');
+
+    const uImg2 = document.createElement('img');
+    uImg2.src = 'assets/images/unrelated2.png';
+    uImg2.addEventListener('click', () => window.location.href = 'unrelated2.html');
+
+    uRow1.appendChild(uImg1);
+    uRow1.appendChild(uImg2);
+
+    // -------- Unrelated Row 2 (optional) --------
+    const uRow2 = document.createElement('div');
+    uRow2.className = 'project-row';
+
+    const uImg3 = document.createElement('img');
+    uImg3.src = 'assets/images/unrelated3.png';
+    uImg3.addEventListener('click', () => window.location.href = 'unrelated3.html');
+
+    const uImg4 = document.createElement('img');
+    uImg4.src = 'assets/images/unrelated4.png';
+    uImg4.addEventListener('click', () => window.location.href = 'unrelated4.html');
+
+    uRow2.appendChild(uImg3);
+    uRow2.appendChild(uImg4);
+
+    // assemble unrelated grid
+    unrelatedGrid.appendChild(uRow1);
+    unrelatedGrid.appendChild(uRow2);
+
+    // assemble section
+    unrelatedSection.appendChild(unrelatedTitle);
+    unrelatedSection.appendChild(unrelatedGrid);
+
+    // add section BELOW your main grid
+    mainContent.appendChild(unrelatedSection);
 
     // =============================
     // Blur Overlay
