@@ -67,7 +67,7 @@ const videoPaths = [
     'assets/videos/grassVideo.mp4',
     'assets/videos/hair.mp4',
     'assets/videos/Donutreal.mp4',
-    'assets/videos/carpet.Mp4'
+    'assets/videos/carpet.MP4'
 
 ];
 
@@ -86,7 +86,7 @@ videoPaths.forEach(src => {
         boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
         transition: 'transform 0.3s ease'
     });
-    if (src.includes('pool.mp4') || src.includes('grassVideo.mp4') || src.includes('carpet.Mp4')) {
+    if (src.includes('pool.mp4') || src.includes('grassVideo.mp4') || src.includes('carpet.MP4')) {
         Object.assign(vid.style, {
             width: '65vw',       // smaller than before
             flex: '0 0 65vw',    // still forces its own row
