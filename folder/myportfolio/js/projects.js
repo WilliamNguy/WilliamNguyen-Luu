@@ -126,48 +126,31 @@ window.addEventListener('DOMContentLoaded', () => {
     unrelatedTitle.className = 'unrelated-title';
     unrelatedTitle.textContent = 'Unrelated Projects';
 
-    const unrelatedGrid = document.createElement('div');
-    unrelatedGrid.className = 'project-grid'; // reuse same grid styling
+    const unrelatedList = document.createElement('ul');
+    unrelatedList.className = 'unrelated-list';
 
-    // -------- Unrelated Row 1 --------
-    const uRow1 = document.createElement('div');
-    uRow1.className = 'project-row';
+    // item 1
+    const item1 = document.createElement('li');
+    item1.textContent = 'Interactive Machine Learning Projects';
+    item1.addEventListener('click', () => window.location.href = 'unrelated1.html');
 
-    const uImg1 = document.createElement('img');
-    uImg1.src = 'assets/images/unrelated1.png';
-    uImg1.addEventListener('click', () => window.location.href = 'unrelated1.html');
+    // item 2
+    const item2 = document.createElement('li');
+    item2.textContent = 'Interactive Soundscape System';
+    item2.addEventListener('click', () => window.location.href = 'unrelated2.html');
 
-    const uImg2 = document.createElement('img');
-    uImg2.src = 'assets/images/unrelated2.png';
-    uImg2.addEventListener('click', () => window.location.href = 'unrelated2.html');
+    // item 3
+    const item3 = document.createElement('li');
+    item3.textContent = '';
+    item3.addEventListener('click', () => window.location.href = 'unrelated3.html');
 
-    uRow1.appendChild(uImg1);
-    uRow1.appendChild(uImg2);
+    unrelatedList.appendChild(item1);
+    unrelatedList.appendChild(item2);
+    // unrelatedList.appendChild(item3);
 
-    // -------- Unrelated Row 2 (optional) --------
-    const uRow2 = document.createElement('div');
-    uRow2.className = 'project-row';
-
-    const uImg3 = document.createElement('img');
-    uImg3.src = 'assets/images/unrelated3.png';
-    uImg3.addEventListener('click', () => window.location.href = 'unrelated3.html');
-
-    const uImg4 = document.createElement('img');
-    uImg4.src = 'assets/images/unrelated4.png';
-    uImg4.addEventListener('click', () => window.location.href = 'unrelated4.html');
-
-    uRow2.appendChild(uImg3);
-    uRow2.appendChild(uImg4);
-
-    // assemble unrelated grid
-    unrelatedGrid.appendChild(uRow1);
-    unrelatedGrid.appendChild(uRow2);
-
-    // assemble section
     unrelatedSection.appendChild(unrelatedTitle);
-    unrelatedSection.appendChild(unrelatedGrid);
+    unrelatedSection.appendChild(unrelatedList);
 
-    // add section BELOW your main grid
     mainContent.appendChild(unrelatedSection);
 
     // =============================

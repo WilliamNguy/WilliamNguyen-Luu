@@ -165,11 +165,33 @@ body {
 
 .unrelated-section {
     margin-top: 20vh;
+    margin-left: 26vw;
+    /* controls horizontal position */
+    margin-bottom: 20vh;
+    /* adds extra scroll space */
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .unrelated-title {
     font-family: 'Lexend', sans-serif;
     font-size: 1.6vw;
-    margin-bottom: 5vh;
-    text-align: center;
+    margin-bottom: 10vh;
+}
+
+.unrelated-list li {
+    list-style: disc;
+    font-family: 'Lexend', sans-serif;
+    font-size: 1vw;
+    font-style: italic;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    line-height: 2.2;
+    cursor: pointer;
+}
+
+.unrelated-list li:hover {
+    color: #fbd84e;
 }
