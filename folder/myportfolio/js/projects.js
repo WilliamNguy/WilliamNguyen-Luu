@@ -136,17 +136,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // item 2
     const item2 = document.createElement('li');
-    item2.textContent = 'Interactive Soundscape System';
+    item2.textContent = 'Interactive Age Detecting Screensaver';
     item2.addEventListener('click', () => window.location.href = 'unrelated2.html');
 
     // item 3
     const item3 = document.createElement('li');
-    item3.textContent = '';
+    item3.textContent = 'Interactive Soundscape System';
     item3.addEventListener('click', () => window.location.href = 'unrelated3.html');
 
     unrelatedList.appendChild(item1);
     unrelatedList.appendChild(item2);
-    // unrelatedList.appendChild(item3);
+    unrelatedList.appendChild(item3);
 
     unrelatedSection.appendChild(unrelatedTitle);
     unrelatedSection.appendChild(unrelatedList);
