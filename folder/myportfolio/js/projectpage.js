@@ -25,6 +25,7 @@ Object.assign(projectsLabel.style, {
     color: '#BE5B80',
     transition: 'color 0.3s ease'
 });
+
 projectsLabel.classList.add('nav-item', 'projects-page-label');
 projectsLabel.addEventListener('click', () => {
     window.location.href = 'index.html?zoom=true';
