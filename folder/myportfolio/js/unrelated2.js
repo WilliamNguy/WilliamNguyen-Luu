@@ -133,7 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
         customCursor.style.opacity = '0';
     });
     image.addEventListener('click', () => {
-        window.location.href = 'https://williamnguy.github.io/WilliamNguyen-Luu/SCREENSAVER/index.html';
+        window.location.href = 'https://williamnguy.github.io/WilliamNguyen-Luu/screen/SCREENSAVER/index.html';
     });
     content.appendChild(title);
     content.appendChild(description);
