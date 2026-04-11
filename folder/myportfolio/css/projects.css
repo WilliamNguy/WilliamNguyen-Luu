@@ -106,7 +106,7 @@ body {
 
 .about-text-box {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 20vw;
     transform: translateY(-50%);
     width: 30vw;
@@ -194,4 +194,37 @@ body {
 
 .unrelated-list li:hover {
     color: #fbd84e;
+}
+
+.profile-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.software-logos {
+    display: flex;
+    gap: 0.8vw;
+    margin-top: 2vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 20vw;
+}
+
+.software-logos img {
+    width: 1.5vw;
+    height: 1.5vw;
+    object-fit: contain;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.software-logos img:hover {
+    transform: scale(1.5);
+    opacity: 0.8;
+}
+
+.profile-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

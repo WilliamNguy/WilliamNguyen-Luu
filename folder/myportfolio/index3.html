@@ -17,7 +17,7 @@
     basker.load().then(font => document.fonts.add(font));
 
     const sans = new FontFace('DmSans', 'url(assets/fonts/DmSans1.ttf)');
-    basker.load().then(font => document.fonts.add(font));
+    sans.load().then(font => document.fonts.add(font));
 
     const newFont = new FontFace('NewFont', 'url(assets/fonts/DmSans1.ttf)');
     newFont.load().then(font => document.fonts.add(font));
@@ -29,7 +29,22 @@
     <h1 class="about-heading">About Me</h1>
 
     <div class="profile-wrapper">
-      <img src="assets/images/me.png" alt="me" class="profile-photo">
+
+      <div class="profile-column">
+        <img src="assets/images/portfoliopic.jpeg" alt="me" class="profile-photo">
+
+        <div class="software-logos">
+          <img src="assets/images/logoP.png" alt="Python">
+          <img src="assets/images/logoJ.png" alt="JavaScript">
+          <img src="assets/images/logoH.png" alt="HTML5">
+          <img src="assets/images/logoCss.png" alt="CSS3">
+          <img src="assets/images/logoC.png" alt="CreativeCloud">
+          <img src="assets/images/logoF.png" alt="Figma">
+          <img src="assets/images/logoM.png" alt="MaxMSP">
+          <img src="assets/images/logoU.png" alt="Unity">
+          <img src="assets/images/logoB.png" alt="Blender">
+        </div>
+      </div>
 
       <div class="about-text-box">
         <p>
