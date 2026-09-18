@@ -156,7 +156,8 @@ introVideo.muted = true;
 introVideo.playsInline = true;
 
 Object.assign(introVideo.style, {
-    width: '30vw',
+    height: '90vh',
+    width: 'auto',
     borderRadius: '0px',
     objectFit: 'contain',
     // transform: 'scale(1.1)'
@@ -166,14 +167,15 @@ introVideoWrapper.appendChild(introVideo);
 
 // === Second Intro Video ===
 const introVideo2 = document.createElement('video');
-introVideo2.src = 'assets/videos/candle_yuzu.mp4';
+introVideo2.src = 'assets/videos/yuzuvid.mp4';
 introVideo2.autoplay = true;
 introVideo2.loop = true;
 introVideo2.muted = true;
 introVideo2.playsInline = true;
 
 Object.assign(introVideo2.style, {
-    width: '30vw',
+    height: '90vh',
+    width: 'auto',
     borderRadius: '0px',
     objectFit: 'contain',
     // transform: 'scale(1.1)'
