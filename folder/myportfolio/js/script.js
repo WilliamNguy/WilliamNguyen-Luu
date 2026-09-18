@@ -3,7 +3,29 @@ document.body.style.margin = '0';
 document.body.style.padding = '0';
 document.body.style.overflow = 'hidden';
 document.body.style.height = '100vh';
-document.body.style.cursor = 'default';
+document.body.style.cursor = 'none';
+
+
+// === Custom Circle Cursor ===
+const customCursor = document.createElement('div');
+
+Object.assign(customCursor.style, {
+    position: 'fixed',
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(210, 20, 60, 0.9)',
+    pointerEvents: 'none',
+    zIndex: '9999',
+    transform: 'translate(-50%, -50%)',
+});
+
+document.body.appendChild(customCursor);
+
+document.addEventListener('mousemove', (e) => {
+    customCursor.style.left = `${e.clientX}px`;
+    customCursor.style.top = `${e.clientY}px`;
+});
 
 
 // Top half (white)
@@ -34,8 +56,8 @@ Object.assign(bottomHalf.style, {
 document.body.appendChild(bottomHalf);
 
 const video = document.createElement('video');
-video.src = 'assets/videos/Donutreal.mp4'; // 🎥 your looped video path
-video.autoplay = true;
+video.src = 'assets/videos/main_moving.mp4'; // 🎥 your looped video path
+video.autoplay = false;
 video.loop = true;
 video.muted = true;
 video.playsInline = true; // Important for autoplay on mobile
@@ -45,7 +67,7 @@ Object.assign(video.style, {
     bottom: '0',
     left: '50%',
     transform: 'translate(-50%, 100vh)',
-    width: '40vw',
+    width: '55vw',
     maxWidth: '90%',
     height: 'auto',
     transition: 'transform 0.5s ease, opacity 0.5s ease',
@@ -54,6 +76,22 @@ Object.assign(video.style, {
     objectFit: 'cover', // ✅ this removes black bars
 });
 document.body.appendChild(video);
+// === Mouse controls video playback ===
+let stopTimer;
+
+document.addEventListener('mousemove', () => {
+
+    // Only play once the video has appeared
+    if (scale > 1.5) {
+        video.play();
+
+        clearTimeout(stopTimer);
+
+        stopTimer = setTimeout(() => {
+            video.pause();
+        }, 150);
+    }
+});
 
 // === Name Container ===
 const container = document.createElement('div');
@@ -100,7 +138,7 @@ container.appendChild(firstName);
 container.appendChild(lastName);
 
 [firstName, lastName].forEach(name => {
-    name.style.cursor = 'pointer';
+    name.style.cursor = 'none';
     name.addEventListener('click', () => {
         const target = 5.5;
         const step = 0.05;
@@ -135,7 +173,7 @@ Object.assign(projectsLabel.style, {
     zIndex: '1'
 });
 projectsLabel.classList.add('nav-item'); // ✅ adds hover effect
-projectsLabel.style.cursor = 'pointer';  // ✅ makes it clickable-looking
+projectsLabel.style.cursor = 'none';  // ✅ makes it clickable-looking
 document.body.appendChild(projectsLabel);
 
 projectsLabel.addEventListener('click', () => {
@@ -158,6 +196,10 @@ Object.assign(navBar.style, {
     zIndex: '1',
     pointerEvents: 'auto' // makes it invisible to cursor clicks
 });
+
+navBar.style.cursor = 'none'; // ← ADD HERE
+
+
 navBar.innerHTML = `
   <span id="nav-projects" class="nav-item">portfolio</span>
   <span id="nav-work" class="nav-item">work</span>
@@ -218,11 +260,12 @@ function updateScene(scale) {
         firstName.style.opacity = '1';
         lastName.style.opacity = '1';
     }
-    // Fade-in donut image
+    // Fade-in video
     if (scale > 1.5) {
         video.style.opacity = '1';
     } else {
         video.style.opacity = '0';
+        video.pause();
     }
 
     // Slide the black bottom background downward based on scale
@@ -239,11 +282,11 @@ function updateScene(scale) {
     if (scale > 1 && scale <= 4) {
         const slidePercent = Math.min((scale - 1) / 3, 1);
         const startPx = window.innerHeight;
-        const endPx = window.innerHeight * 0.2; // ~20% from top
+        const endPx = window.innerHeight * 0.08; // ~20% from top
         const currentPx = startPx - slidePercent * (startPx - endPx);
         video.style.transform = `translate(-50%, ${currentPx}px)`;
     } else if (scale > 4) {
-        const finalPx = window.innerHeight * 0.2;
+        const finalPx = window.innerHeight * 0.08;
         video.style.transform = `translate(-50%, ${finalPx}px)`;
     } else {
         video.style.transform = `translate(-50%, ${window.innerHeight}px)`;

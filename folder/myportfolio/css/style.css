@@ -15,12 +15,12 @@ body {
 /* Base nav item style */
 .nav-item {
   transition: color 0.3s ease;
-  cursor: pointer;
+  cursor: none;
 }
 
 /* Default hover for all nav items */
 .nav-item:hover {
-  color: #73ddd4;
+  color: #f7f264;
   font-weight: bold;
 }
 

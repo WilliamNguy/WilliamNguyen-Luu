@@ -143,6 +143,7 @@ Object.assign(introVideoWrapper.style, {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: '5vw',
     padding: '3vh 0',
     overflow: 'hidden'
 });
@@ -157,11 +158,29 @@ introVideo.playsInline = true;
 Object.assign(introVideo.style, {
     width: '30vw',
     borderRadius: '0px',
-    objectFit: 'cover',
-    transform: 'scale(1.1)'
+    objectFit: 'contain',
+    // transform: 'scale(1.1)'
 });
 
 introVideoWrapper.appendChild(introVideo);
+
+// === Second Intro Video ===
+const introVideo2 = document.createElement('video');
+introVideo2.src = 'assets/videos/candle_yuzu.mp4';
+introVideo2.autoplay = true;
+introVideo2.loop = true;
+introVideo2.muted = true;
+introVideo2.playsInline = true;
+
+Object.assign(introVideo2.style, {
+    width: '30vw',
+    borderRadius: '0px',
+    objectFit: 'contain',
+    // transform: 'scale(1.1)'
+});
+
+introVideoWrapper.appendChild(introVideo2);
+
 document.body.appendChild(introVideoWrapper);
 
 const imageGallery = document.createElement('div');
