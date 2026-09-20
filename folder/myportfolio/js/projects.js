@@ -56,7 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
     row2.className = 'project-row';
 
     const img3 = document.createElement('img');
-    img3.src = 'assets/images/grass.png';
+    img3.src = 'assets/images/topDown.png';
     img3.addEventListener('click', () => window.location.href = 'project3.html');
 
     const img4 = document.createElement('img');
