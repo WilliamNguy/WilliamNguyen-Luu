@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
     img1.addEventListener('click', () => window.location.href = 'project1.html');
 
     const img2 = document.createElement('img');
-    img2.src = 'assets/images/room.png';
+    img2.src = 'assets/images/iteration1.png';
     img2.addEventListener('click', () => window.location.href = 'project2.html');
 
     row1.appendChild(img1);

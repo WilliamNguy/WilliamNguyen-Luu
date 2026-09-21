@@ -69,7 +69,9 @@ const videoPaths = [
     'assets/videos/hair.mp4',
     'assets/videos/Donutreal.mp4',
     'assets/videos/carpet.mp4',
-    'assets/videos/spalsh.mp4'
+    'assets/videos/spalsh.mp4',
+    'assets/videos/yuzuvid.mp4',
+    'assets/videos/main_moving.mp4'
 
 ];
 
