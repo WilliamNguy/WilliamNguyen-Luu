@@ -67,7 +67,7 @@ Object.assign(video.style, {
     bottom: '0',
     left: '50%',
     transform: 'translate(-50%, 100vh)',
-    width: '55vw',
+    width: '50vw',
     maxWidth: '90%',
     height: 'auto',
     transition: 'transform 0.5s ease, opacity 0.5s ease',
@@ -89,7 +89,7 @@ document.addEventListener('mousemove', () => {
 
         stopTimer = setTimeout(() => {
             video.pause();
-        }, 150);
+        }, 20);
     }
 });
 
@@ -282,11 +282,11 @@ function updateScene(scale) {
     if (scale > 1 && scale <= 4) {
         const slidePercent = Math.min((scale - 1) / 3, 1);
         const startPx = window.innerHeight;
-        const endPx = window.innerHeight * 0.08; // ~20% from top
+        const endPx = window.innerHeight * 0.12; // ~20% from top
         const currentPx = startPx - slidePercent * (startPx - endPx);
         video.style.transform = `translate(-50%, ${currentPx}px)`;
     } else if (scale > 4) {
-        const finalPx = window.innerHeight * 0.08;
+        const finalPx = window.innerHeight * 0.12;
         video.style.transform = `translate(-50%, ${finalPx}px)`;
     } else {
         video.style.transform = `translate(-50%, ${window.innerHeight}px)`;

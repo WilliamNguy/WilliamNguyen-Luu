@@ -30,12 +30,23 @@
         <video id="video2" autoplay muted loop playsinline style="width: 30vw; height: auto; object-fit: cover;">
             <source src="assets/videos/GiantCan.mp4" type="video/mp4">
         </video>
-
+<video id="video3" autoplay muted loop playsinline style="width: 30vw; height: auto; object-fit: cover;">
+            <source src="assets/videos/CAR.mp4#t=3" type="video/mp4">
+        </video>
     </div>
 
     <!-- JavaScript files -->
     <script src="js/navbar.js"></script>
-   
+   <script>
+    const video3 = document.getElementById('video3');
+
+    video3.addEventListener('timeupdate', () => {
+        if (video3.currentTime >= 25) {
+            video3.currentTime = 3;
+            video3.play().catch(() => {});
+        }
+    });
+</script>
 </body>
 
 </html>
