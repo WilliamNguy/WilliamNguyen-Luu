@@ -14,6 +14,22 @@ Object.assign(topBar.style, {
     // boxShadow: '0 2px 5px rgba(0, 0, 0, 0.05)' // optional subtle shadow
 });
 document.body.appendChild(topBar);
+const designerSubtitle = document.createElement('div');
+designerSubtitle.textContent = '3D Artist & Digital Designer';
+
+Object.assign(designerSubtitle.style, {
+    position: 'absolute',
+    top: '8.5vh',
+    left: '3vw',
+    fontSize: '0.7vw',
+    color: '#222',
+    fontFamily: 'Lexend',
+    letterSpacing: '0.03em',
+    opacity: '1',
+    transition: 'opacity 0.5s ease',
+    zIndex: '1'
+});
+topBar.appendChild(designerSubtitle);
 
 // === Projects Label (Name) ===
 const projectsLabel = document.createElement('div');

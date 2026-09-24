@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>William Nguyen-Luu</title>
+    <title>Entanglement — William Nguyen-Luu</title>
+
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/projects.css" />
+
     <script>
         const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
         lexend.load().then(font => document.fonts.add(font));
@@ -20,23 +22,78 @@
 </head>
 
 <body>
+
     <div id="project-container">
-        <div id="project-container"
-            style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4vw; padding: 15vh 5vw;">
-            <img src="assets/images/grey_room.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <img src="assets/images/pink_room.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <img src="assets/images/Low_Poly_Final.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <img src="assets/images/iteration1.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <img src="assets/images/iteration2.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <img src="assets/images/iteration3.png" style="width: 40vw; border-radius: 0px; object-fit: cover;">
-            <!-- Add more images as needed -->
+
+        <!-- PROJECT INFORMATION -->
+        <section class="project-info">
+
+            <!-- LEFT -->
+            <div class="project-heading">
+                <h1>ENTANGLEMENT</h1>
+                <p class="project-type">3D Environment · 2026</p>
+            </div>
+
+            <!-- MIDDLE -->
+            <div class="project-description">
+                <p>
+                    A 3D environment exploring the entanglement between
+                    technology and ecology. A 90s CRT monitor becomes
+                    integrated with organic growth inside a liminal
+                    architectural space, blurring the boundaries between
+                    the artificial and natural.
+                </p>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="project-details">
+
+                <div>
+                    <p class="detail-title">ROLE</p>
+                    <p>
+                        3D Modeling<br>
+                        Environment Design<br>
+                        Texturing<br>
+                        Lighting<br>
+                        Rendering
+                    </p>
+                </div>
+
+                <div>
+                    <p class="detail-title">TOOLS</p>
+                    <p>Blender</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECT IMAGES -->
+        <div class="project-gallery">
+
+            <img
+                src="assets/images/iteration1.png"
+                alt="Entanglement - Iteration 1">
+
+            <img
+                src="assets/images/iteration2.png"
+                alt="Entanglement - Iteration 2">
+
+            <img
+                src="assets/images/iteration3.png"
+                alt="Entanglement - Iteration 3">
+
         </div>
-        <!-- Your project content here -->
+
     </div>
+
 
     <!-- JavaScript files -->
     <script src="js/navbar.js"></script>
+
     <!-- <script src="js/projects.js"></script> -->
+
 </body>
 
 </html>

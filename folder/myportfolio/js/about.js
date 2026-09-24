@@ -36,6 +36,7 @@ navBar.innerHTML = `
 `;
 document.body.appendChild(navBar);
 
+
 document.getElementById('nav-projects').addEventListener('click', () => {
     window.location.href = 'index1.html';
 });

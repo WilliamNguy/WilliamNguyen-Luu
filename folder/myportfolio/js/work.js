@@ -85,6 +85,22 @@ window.addEventListener('DOMContentLoaded', () => {
         padding: '0 3vw',
         zIndex: '10',
     });
+    const designerSubtitle = document.createElement('div');
+designerSubtitle.textContent = '3D Artist & Digital Designer';
+
+Object.assign(designerSubtitle.style, {
+    position: 'absolute',
+    top: '8.5vh',
+    left: '3vw',
+    fontSize: '0.7vw',
+    color: '#222',
+    fontFamily: 'Lexend',
+    letterSpacing: '0.03em',
+    opacity: '1',
+    transition: 'opacity 0.5s ease',
+    zIndex: '1'
+});
+topBar.appendChild(designerSubtitle);
 
     topBar.appendChild(projectsLabel);
     topBar.appendChild(navBar);

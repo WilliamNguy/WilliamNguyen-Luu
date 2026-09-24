@@ -15,6 +15,8 @@ Object.assign(topBar.style, {
 });
 document.body.appendChild(topBar);
 
+
+
 // === Projects Label (Name) ===
 const projectsLabel = document.createElement('div');
 projectsLabel.textContent = 'William Nguyen-Luu';
@@ -22,7 +24,7 @@ Object.assign(projectsLabel.style, {
     fontSize: '2vw',
     fontFamily: 'Notable',
     cursor: 'pointer',
-    color: '#BE5B80',
+    color: '#fbd149',
     transition: 'color 0.3s ease'
 });
 projectsLabel.classList.add('nav-item', 'projects-page-label');

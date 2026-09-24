@@ -228,3 +228,137 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
+/* ========================================
+   INDIVIDUAL PROJECT PAGE
+======================================== */
+
+.project-info {
+    width: 90vw;
+    margin: 0 auto;
+    padding-top: 18vh;
+    padding-bottom: 10vh;
+
+    display: grid;
+    grid-template-columns: 1.2fr 1.5fr 1fr;
+    gap: 6vw;
+
+    font-family: 'Lexend', sans-serif;
+}
+
+
+/* ========================================
+   INDIVIDUAL PROJECT PAGE
+======================================== */
+
+.project-info {
+    width: 90vw;
+    margin: 0 auto;
+    padding-top: 18vh;
+    padding-bottom: 10vh;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3vh;
+
+    font-family: 'Lexend', sans-serif;
+}
+
+
+/* PROJECT TITLE */
+
+.project-heading h1 {
+    margin: 0;
+
+    font-family: 'Lexend', sans-serif;
+    font-size: 1vw;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+}
+
+.project-type {
+    margin-top: 1vh;
+    margin-bottom: 0;
+
+    font-size: 0.8vw;
+    opacity: 0.6;
+}
+
+
+/* DESCRIPTION */
+
+.project-description {
+    width: 45vw;
+
+    font-size: 0.6vw;
+    line-height: 1.6;
+}
+
+.project-description p {
+    margin: 0;
+}
+
+
+/* ROLE + TOOLS */
+
+.project-details {
+    display: flex;
+    flex-direction: row;
+    gap: 6vw;
+
+    font-size: 0.60vw;
+    line-height: 1.7;
+}
+
+.project-details p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.detail-title {
+    font-weight: 600;
+    margin-bottom: 1vh !important;
+}
+
+
+/* IMAGE GALLERY */
+
+.project-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    gap: 4vw;
+
+    padding: 0 5vw 15vh 5vw;
+}
+
+.project-gallery img {
+    width: 40vw;
+    height: auto;
+
+    display: block;
+    border-radius: 0;
+
+    object-fit: cover;
+}
+
+
+/* IMAGE GALLERY */
+
+.project-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    gap: 4vw;
+
+    padding: 0 5vw 15vh 5vw;
+}
+
+.project-gallery img {
+    width: 40vw;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}

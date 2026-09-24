@@ -176,6 +176,25 @@ projectsLabel.classList.add('nav-item'); // ✅ adds hover effect
 projectsLabel.style.cursor = 'none';  // ✅ makes it clickable-looking
 document.body.appendChild(projectsLabel);
 
+// === Designer Subtitle ===
+const designerSubtitle = document.createElement('div');
+designerSubtitle.textContent = '3D Artist & Digital Designer';
+
+Object.assign(designerSubtitle.style, {
+    position: 'absolute',
+    top: '8.5vh',
+    left: '3vw',
+    fontSize: '0.7vw',
+    color: '#222',
+    fontFamily: 'Lexend',
+    letterSpacing: '0.03em',
+    opacity: '0',
+    transition: 'opacity 0.5s ease',
+    zIndex: '1'
+});
+
+document.body.appendChild(designerSubtitle);
+
 projectsLabel.addEventListener('click', () => {
     window.location.href = 'index.html?zoom=true';
 });
@@ -293,12 +312,16 @@ function updateScene(scale) {
     }
 
     // Show "Projects" label after scale 4.5
-    if (scale > 4.5) {
-        const alpha = Math.min((scale - 4.5) / 0.5, 1);
-        projectsLabel.style.opacity = alpha;
-    } else {
-        projectsLabel.style.opacity = '0';
-    }
+ // Show name + designer subtitle after scale 4.5
+if (scale > 4.5) {
+    const alpha = Math.min((scale - 4.5) / 0.5, 1);
+
+    projectsLabel.style.opacity = alpha;
+    designerSubtitle.style.opacity = alpha;
+} else {
+    projectsLabel.style.opacity = '0';
+    designerSubtitle.style.opacity = '0';
+}
 
     // Show nav bar after scale 4.5
     if (scale > 4.5) {

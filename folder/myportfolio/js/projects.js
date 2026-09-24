@@ -5,13 +5,21 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const customCursor = document.createElement('div');
-    customCursor.textContent = 'click me';
+customCursor.textContent = '';    
+    const projectCategories = [
+    'ENVIRONMENTS',
+    '3D MODELING',
+    'ENVIRONMENTS',
+    'VFX',
+    'MOTION',
+    'ANIMATION'
+];
 
     Object.assign(customCursor.style, {
         position: 'fixed',
         pointerEvents: 'none',
         fontFamily: 'Lexend',
-        fontSize: '4.5vw',
+        fontSize: '3.5vw',
         fontWeight: 'bold',
         color: '#fbd84e',
         padding: '4px 10px',
@@ -71,10 +79,14 @@ window.addEventListener('DOMContentLoaded', () => {
     row3.className = 'project-row';
 
     const video5 = document.createElement('video');
-    video5.src = 'assets/videos/Donutreal.mp4';
+    video5.src = 'assets/videos/yuzuvid.mp4';
     video5.loop = true;
     video5.muted = true;
     video5.playsInline = true;
+    // Show the frame at 5 seconds initially
+video5.addEventListener('loadedmetadata', () => {
+    video5.currentTime = 5;
+});
 
     Object.assign(video5.style, {
         width: '20vw',
@@ -91,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     video5.addEventListener('mouseleave', () => {
         video5.pause();
-        video5.currentTime = 0;
+        video5.currentTime = 5;
         video5.style.transform = 'scale(1)';
     });
 
@@ -104,6 +116,16 @@ window.addEventListener('DOMContentLoaded', () => {
     img6.addEventListener('click', () => window.location.href = 'project6.html');
 
     row3.appendChild(img6);
+    // =============================
+// Project Categories
+// =============================
+
+img1.dataset.category = 'INTERIORS';
+img2.dataset.category = 'CLICK ME';
+img3.dataset.category = 'ENVIRONMENTS';
+img4.dataset.category = 'MODELLING';
+video5.dataset.category = 'MOTION';
+img6.dataset.category = 'VFX';
 
     // Assemble grid
     grid.appendChild(row1);
@@ -124,7 +146,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const unrelatedTitle = document.createElement('div');
     unrelatedTitle.className = 'unrelated-title';
-    unrelatedTitle.textContent = 'Unrelated Projects';
+    unrelatedTitle.textContent = 'Interactive Experiments';
 
     const unrelatedList = document.createElement('ul');
     unrelatedList.className = 'unrelated-list';
@@ -208,8 +230,25 @@ window.addEventListener('DOMContentLoaded', () => {
         padding: '0 3vw',
         zIndex: '12'
     });
+    const designerSubtitle = document.createElement('div');
+designerSubtitle.textContent = '3D Artist & Digital Designer';
+
+Object.assign(designerSubtitle.style, {
+    position: 'absolute',
+    top: '8.5vh',
+    left: '3vw',
+    fontSize: '0.7vw',
+    color: '#222',
+    fontFamily: 'Lexend',
+    letterSpacing: '0.03em',
+    opacity: '1',
+    transition: 'opacity 0.5s ease',
+    zIndex: '1'
+});
+topBar.appendChild(designerSubtitle);
 
     topBar.appendChild(projectsLabel);
+    
     topBar.appendChild(navBar);
     document.body.appendChild(topBar);
 
@@ -229,19 +268,25 @@ window.addEventListener('DOMContentLoaded', () => {
     // Hover Blur + Custom Cursor Logic
     // =============================
 
-    const allMedia = document.querySelectorAll('.project-grid img, .project-grid video');
+   const allMedia = document.querySelectorAll('.project-grid img, .project-grid video');
 
-    allMedia.forEach(media => {
+allMedia.forEach(media => {
 
-        media.addEventListener('mouseenter', () => {
-            blurOverlay.classList.add('visible');
-            customCursor.style.opacity = '1';
-        });
+    media.addEventListener('mouseenter', () => {
+        blurOverlay.classList.add('visible');
 
-        media.addEventListener('mouseleave', () => {
-            blurOverlay.classList.remove('visible');
-            customCursor.style.opacity = '0';
-        });
+        // Show this project's category
+        customCursor.textContent = media.dataset.category;
+
+        customCursor.style.opacity = '1';
     });
+
+    media.addEventListener('mouseleave', () => {
+        blurOverlay.classList.remove('visible');
+
+        customCursor.style.opacity = '0';
+        customCursor.textContent = '';
+    });
+});
 
 });
