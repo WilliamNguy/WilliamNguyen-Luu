@@ -62,16 +62,22 @@ Object.assign(videoContainer.style, {
 
 // === Replace with your actual video paths
 const videoPaths = [
-    'assets/videos/candle.mp4',
+    'assets/videos/yuzuvid.mp4',
     'assets/videos/cool.mp4',
+    
+     'assets/videos/purple.mp4',
+     'assets/videos/main_moving.mp4',
+     'assets/videos/candle.mp4',
+    
+   
     'assets/videos/pool.mp4',
-    'assets/videos/grassVideo.mp4',
-    'assets/videos/hair.mp4',
-    'assets/videos/Donutreal.mp4',
+    // 'assets/videos/grassVideo.mp4',
+    
     'assets/videos/carpet.mp4',
     'assets/videos/spalsh.mp4',
-    'assets/videos/yuzuvid.mp4',
-    'assets/videos/main_moving.mp4'
+    
+    'assets/videos/Donutreal.mp4',
+    'assets/videos/hair.mp4',
 
 ];
 

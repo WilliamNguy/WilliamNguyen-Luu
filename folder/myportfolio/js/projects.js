@@ -128,9 +128,9 @@ video5.dataset.category = 'MOTION';
 img6.dataset.category = 'VFX';
 
     // Assemble grid
-    grid.appendChild(row1);
-    grid.appendChild(row2);
     grid.appendChild(row3);
+    grid.appendChild(row2);
+    grid.appendChild(row1);
 
     const mainContent = document.createElement('div');
     mainContent.className = 'main-content';
@@ -245,7 +245,7 @@ Object.assign(designerSubtitle.style, {
     transition: 'opacity 0.5s ease',
     zIndex: '1'
 });
-topBar.appendChild(designerSubtitle);
+topBar.appendChild(designerSubtitle);   
 
     topBar.appendChild(projectsLabel);
     
