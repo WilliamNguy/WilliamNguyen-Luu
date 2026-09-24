@@ -64,12 +64,9 @@ Object.assign(videoContainer.style, {
 const videoPaths = [
     'assets/videos/yuzuvid.mp4',
     'assets/videos/cool.mp4',
-    
-     'assets/videos/purple.mp4',
+     'assets/videos/purple.mp4', 
      'assets/videos/main_moving.mp4',
      'assets/videos/candle.mp4',
-    
-   
     'assets/videos/pool.mp4',
     // 'assets/videos/grassVideo.mp4',
     
