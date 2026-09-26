@@ -33,6 +33,7 @@ projectsLabel.addEventListener('click', () => {
 });
 topBar.appendChild(projectsLabel);
 
+
 // === Nav Bar (Links) ===
 const navBar = document.createElement('div');
 Object.assign(navBar.style, {
@@ -49,6 +50,33 @@ navBar.innerHTML = `
   <span id="nav-about" class="nav-item">about</span>
 `;
 topBar.appendChild(navBar);
+// ========================================
+// WORK INFORMATION
+// ========================================
+
+const workInfo = document.createElement('section');
+
+Object.assign(workInfo.style, {
+    width: '100vw',
+    boxSizing: 'border-box',
+    padding: '16vh 5vw 6vh 5vw',
+    backgroundColor: '#f5f5f5',
+    fontFamily: 'Lexend'
+});
+
+workInfo.innerHTML = `
+   
+
+    <p style="
+        font-size: 1vw;
+        margin: 0;
+        color: #222;
+    ">
+        Work for @luasunday · 2025
+    </p>
+`;
+
+document.body.appendChild(workInfo);
 
 const videoWrapper = document.createElement('div');
 Object.assign(videoWrapper.style, {

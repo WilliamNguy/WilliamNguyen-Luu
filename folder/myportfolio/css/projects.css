@@ -362,3 +362,55 @@ body {
     display: block;
     object-fit: cover;
 }
+
+/* ========================================
+   MOTION PAGE
+======================================== */
+
+#motion-gallery {
+    width: 84vw;
+    margin: 0 auto;
+}
+
+
+/* TWO VIDEO ROW */
+
+.motion-row {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 4vw;
+
+    margin-bottom: 4vw;
+}
+
+.motion-row video {
+    width: 40vw;
+    height: auto;
+
+    display: block;
+    object-fit: cover;
+}
+
+
+/* INFORMATION BETWEEN ROWS */
+
+.motion-info {
+    width: 100%;
+    margin: 0;
+
+    padding-top: 2vh;
+    padding-bottom: 8vh;
+}
+
+
+.motion-info .project-heading h2 {
+    margin: 0;
+
+    font-family: 'Lexend', sans-serif;
+    font-size: 2vw;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+}

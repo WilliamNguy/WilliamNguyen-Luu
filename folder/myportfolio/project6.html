@@ -4,49 +4,345 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>William Nguyen-Luu</title>
-    <!-- <link rel="stylesheet" href="css/style.css" /> -->
+
+    <title>VFX — William Nguyen-Luu</title>
+
     <link rel="stylesheet" href="css/projects.css" />
+
     <script>
-        const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
+        const lexend = new FontFace(
+            'Lexend',
+            'url(assets/fonts/Lexend.ttf)'
+        );
         lexend.load().then(font => document.fonts.add(font));
 
-        const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
+        const notable = new FontFace(
+            'Notable',
+            'url(assets/fonts/Notable.ttf)'
+        );
         notable.load().then(font => document.fonts.add(font));
 
-        const basker = new FontFace('BaskerItalic', 'url(assets/fonts/BaskerItalic.ttf)');
+        const basker = new FontFace(
+            'BaskerItalic',
+            'url(assets/fonts/BaskerItalic.ttf)'
+        );
         basker.load().then(font => document.fonts.add(font));
     </script>
+
 </head>
 
+
 <body>
-    <div id="project-container"
-        style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4vw; padding: 15vh 5vw;">
 
-        <video autoplay muted loop playsinline style="width: 30vw; height: auto; object-fit: cover;">
-            <source src="assets/videos/backyard.mp4" type="video/mp4">
-        </video>
+    <!-- ========================================
+         VFX PROJECT
+    ========================================= -->
 
-        <video id="video2" autoplay muted loop playsinline style="width: 30vw; height: auto; object-fit: cover;">
-            <source src="assets/videos/GiantCan.mp4" type="video/mp4">
-        </video>
-<video id="video3" autoplay muted loop playsinline style="width: 30vw; height: auto; object-fit: cover;">
-            <source src="assets/videos/CAR.mp4#t=3" type="video/mp4">
-        </video>
+    <div id="project-container">
+
+        <!-- PROJECT INFORMATION -->
+
+        <section class="project-info">
+
+    <div class="project-heading">
+        <h1>VFX</h1>
+
+        <p class="project-type">
+            3D Integration & Visual Effects · 2026
+        </p>
     </div>
 
-    <!-- JavaScript files -->
-    <script src="js/navbar.js"></script>
-   <script>
-    const video3 = document.getElementById('video3');
+</section>
 
-    video3.addEventListener('timeupdate', () => {
-        if (video3.currentTime >= 25) {
-            video3.currentTime = 3;
-            video3.play().catch(() => {});
-        }
-    });
-</script>
+
+
+        <!-- ========================================
+             VFX VIDEOS
+        ========================================= -->
+
+        <div
+            id="vfx-gallery"
+            style="
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 4vw;
+                padding: 0 5vw 15vh 5vw;
+            "
+        >
+
+
+            <!-- BACKYARD -->
+
+            <video
+                class="vfx-video"
+                data-title="3D INTEGRATION"
+                data-type="VFX · 3D RECONSTRUCTION · 2026"
+                autoplay
+                muted
+                loop
+                playsinline
+                style="
+                    width: 30vw;
+                    height: auto;
+                    object-fit: cover;
+                    cursor: none;
+                    transition: transform 0.3s ease;
+                "
+            >
+
+                <source
+                    src="assets/videos/backyard.mp4"
+                    type="video/mp4"
+                >
+
+            </video>
+
+
+
+            <!-- GIANT CAN -->
+
+            <video
+                id="video2"
+                class="vfx-video"
+                data-title="3D INTEGRATION"
+                data-type="VFX · 3D RECONSTRUCTION · 2026"
+                autoplay
+                muted
+                loop
+                playsinline
+                style="
+                    width: 30vw;
+                    height: auto;
+                    object-fit: cover;
+                    cursor: none;
+                    transition: transform 0.3s ease;
+                "
+            >
+
+                <source
+                    src="assets/videos/GiantCan.mp4"
+                    type="video/mp4"
+                >
+
+            </video>
+
+
+
+            <!-- CAR -->
+
+            <video
+                id="video3"
+                class="vfx-video"
+                data-title="3D INTEGRATION"
+                data-type="VFX · 3D RECONSTRUCTION · 2026"
+                autoplay
+                muted
+                loop
+                playsinline
+                style="
+                    width: 30vw;
+                    height: auto;
+                    object-fit: cover;
+                    cursor: none;
+                    transition: transform 0.3s ease;
+                "
+            >
+
+                <source
+                    src="assets/videos/CAR.mp4#t=3"
+                    type="video/mp4"
+                >
+
+            </video>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================================
+         NAVBAR
+    ========================================= -->
+
+    <script src="js/navbar.js"></script>
+
+
+
+    <!-- ========================================
+         VFX HOVER CURSOR
+    ========================================= -->
+
+    <script>
+
+        const projectCursor = document.createElement('div');
+
+
+        Object.assign(projectCursor.style, {
+
+            position: 'fixed',
+
+            width: '40vw',
+
+            fontFamily: 'Lexend',
+
+            color: '#FFEA00',
+
+            textAlign: 'center',
+
+            pointerEvents: 'none',
+
+            zIndex: '2000',
+
+            opacity: '0',
+
+            transform: 'translate(-50%, -50%)',
+
+            transition: 'opacity 0.2s ease'
+
+        });
+
+
+        document.body.appendChild(projectCursor);
+
+
+
+        // ========================================
+        // DESCRIPTION
+        // ========================================
+
+        const vfxDescription = `
+            An exploration of integrating 3D objects into live-action
+            footage. The original video is reconstructed in 3D using
+            GLOMAP to establish the camera movement and spatial
+            environment. In Blender, the footage is projected onto
+            simplified geometry surrounding the added object, allowing
+            the filmed environment to remain visible as the camera moves.
+            Lighting and perspective are then matched to blend the
+            digital object into the original scene.
+        `;
+
+
+
+        // ========================================
+        // ADD HOVER TO EACH VIDEO
+        // ========================================
+
+        const vfxVideos =
+            document.querySelectorAll('.vfx-video');
+
+
+        vfxVideos.forEach(video => {
+
+
+            // MOUSE ENTER
+
+            video.addEventListener('mouseenter', () => {
+
+
+                projectCursor.innerHTML = `
+
+                    <div style="
+                        font-size: 3.5vw;
+                        font-weight: bold;
+                        line-height: 1;
+                        margin-bottom: 0.7vw;
+                    ">
+
+                        ${video.dataset.title}
+
+                    </div>
+
+
+                    <div style="
+                        font-size: 0.9vw;
+                        font-weight: 500;
+                        margin-bottom: 0.8vw;
+                    ">
+
+                        ${video.dataset.type}
+
+                    </div>
+
+
+                    <div style="
+                        font-size: 0.8vw;
+                        line-height: 1.5;
+                        font-weight: 400;
+                    ">
+
+                        ${vfxDescription}
+
+                    </div>
+
+                `;
+
+
+                projectCursor.style.opacity = '1';
+
+                video.style.transform = 'scale(1.03)';
+
+            });
+
+
+
+            // MOUSE MOVE
+
+            video.addEventListener('mousemove', (e) => {
+
+                projectCursor.style.left =
+                    `${e.clientX}px`;
+
+                projectCursor.style.top =
+                    `${e.clientY}px`;
+
+            });
+
+
+
+            // MOUSE LEAVE
+
+            video.addEventListener('mouseleave', () => {
+
+                projectCursor.style.opacity = '0';
+
+                video.style.transform = 'scale(1)';
+
+            });
+
+
+        });
+
+
+
+        // ========================================
+        // CAR VIDEO
+        // PLAY FROM 3s → 25s
+        // ========================================
+
+        const video3 =
+            document.getElementById('video3');
+
+
+        video3.addEventListener('timeupdate', () => {
+
+            if (video3.currentTime >= 25) {
+
+                video3.currentTime = 3;
+
+                video3
+                    .play()
+                    .catch(() => {});
+
+            }
+
+        });
+
+    </script>
+
+
 </body>
 
 </html>
