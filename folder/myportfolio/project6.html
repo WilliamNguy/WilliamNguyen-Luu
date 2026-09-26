@@ -29,10 +29,65 @@
         basker.load().then(font => document.fonts.add(font));
     </script>
 
+
+    <style>
+
+        /* ========================================
+           VFX TITLE
+        ======================================== */
+
+        .vfx-project-info {
+            width: 92vw;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+
+        /* ========================================
+           VFX GALLERY
+        ======================================== */
+
+        #vfx-gallery {
+            width: 92vw;
+
+            margin: 0 auto;
+
+            display: flex;
+            flex-wrap: wrap;
+
+            justify-content: space-between;
+
+            gap: 4vw;
+
+            padding: 0 0 15vh 0;
+
+            box-sizing: border-box;
+        }
+
+
+        /* ========================================
+           VFX VIDEOS
+        ======================================== */
+
+        .vfx-video {
+            width: 28vw;
+
+            height: auto;
+
+            object-fit: cover;
+
+            cursor: none;
+
+            transition: transform 0.3s ease;
+        }
+
+    </style>
+
 </head>
 
 
 <body>
+
 
     <!-- ========================================
          VFX PROJECT
@@ -40,19 +95,26 @@
 
     <div id="project-container">
 
-        <!-- PROJECT INFORMATION -->
 
-        <section class="project-info">
+        <!-- ========================================
+             PROJECT INFORMATION
+        ========================================= -->
 
-    <div class="project-heading">
-        <h1>VFX</h1>
+        <section class="project-info vfx-project-info">
 
-        <p class="project-type">
-            3D Integration & Visual Effects · 2026
-        </p>
-    </div>
+            <div class="project-heading">
 
-</section>
+                <h1>
+                    VFX
+                </h1>
+
+                <p class="project-type">
+                    3D Integration & Visual Effects · 2026
+                </p>
+
+            </div>
+
+        </section>
 
 
 
@@ -60,35 +122,24 @@
              VFX VIDEOS
         ========================================= -->
 
-        <div
-            id="vfx-gallery"
-            style="
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 4vw;
-                padding: 0 5vw 15vh 5vw;
-            "
-        >
+        <div id="vfx-gallery">
 
 
-            <!-- BACKYARD -->
+            <!-- ========================================
+                 BACKYARD
+            ========================================= -->
 
             <video
                 class="vfx-video"
+
                 data-title="3D INTEGRATION"
+
                 data-type="VFX · 3D RECONSTRUCTION · 2026"
+
                 autoplay
                 muted
                 loop
                 playsinline
-                style="
-                    width: 30vw;
-                    height: auto;
-                    object-fit: cover;
-                    cursor: none;
-                    transition: transform 0.3s ease;
-                "
             >
 
                 <source
@@ -100,24 +151,23 @@
 
 
 
-            <!-- GIANT CAN -->
+            <!-- ========================================
+                 GIANT CAN
+            ========================================= -->
 
             <video
                 id="video2"
+
                 class="vfx-video"
+
                 data-title="3D INTEGRATION"
+
                 data-type="VFX · 3D RECONSTRUCTION · 2026"
+
                 autoplay
                 muted
                 loop
                 playsinline
-                style="
-                    width: 30vw;
-                    height: auto;
-                    object-fit: cover;
-                    cursor: none;
-                    transition: transform 0.3s ease;
-                "
             >
 
                 <source
@@ -129,24 +179,23 @@
 
 
 
-            <!-- CAR -->
+            <!-- ========================================
+                 CAR
+            ========================================= -->
 
             <video
                 id="video3"
+
                 class="vfx-video"
+
                 data-title="3D INTEGRATION"
+
                 data-type="VFX · 3D RECONSTRUCTION · 2026"
+
                 autoplay
                 muted
                 loop
                 playsinline
-                style="
-                    width: 30vw;
-                    height: auto;
-                    object-fit: cover;
-                    cursor: none;
-                    transition: transform 0.3s ease;
-                "
             >
 
                 <source
@@ -177,7 +226,13 @@
 
     <script>
 
-        const projectCursor = document.createElement('div');
+
+        // ========================================
+        // CREATE HOVER CURSOR
+        // ========================================
+
+        const projectCursor =
+            document.createElement('div');
 
 
         Object.assign(projectCursor.style, {
@@ -191,6 +246,7 @@
             color: '#FFEA00',
 
             textAlign: 'center',
+
 
             pointerEvents: 'none',
 
@@ -210,7 +266,7 @@
 
 
         // ========================================
-        // DESCRIPTION
+        // VFX DESCRIPTION
         // ========================================
 
         const vfxDescription = `
@@ -227,34 +283,48 @@
 
 
         // ========================================
-        // ADD HOVER TO EACH VIDEO
+        // GET ALL VFX VIDEOS
         // ========================================
 
         const vfxVideos =
             document.querySelectorAll('.vfx-video');
 
 
+
+        // ========================================
+        // ADD HOVER EFFECT
+        // ========================================
+
         vfxVideos.forEach(video => {
 
 
+            // ------------------------------------
             // MOUSE ENTER
+            // ------------------------------------
 
             video.addEventListener('mouseenter', () => {
 
 
                 projectCursor.innerHTML = `
 
+
+                    <!-- TITLE -->
+
                     <div style="
                         font-size: 3.5vw;
                         font-weight: bold;
                         line-height: 1;
                         margin-bottom: 0.7vw;
+                        white-space: nowrap;
                     ">
 
                         ${video.dataset.title}
 
                     </div>
 
+
+
+                    <!-- TYPE -->
 
                     <div style="
                         font-size: 0.9vw;
@@ -267,10 +337,15 @@
                     </div>
 
 
+
+                    <!-- DESCRIPTION -->
+
                     <div style="
                         font-size: 0.8vw;
                         line-height: 1.5;
                         font-weight: 400;
+                        text-align: justify;
+
                     ">
 
                         ${vfxDescription}
@@ -282,13 +357,16 @@
 
                 projectCursor.style.opacity = '1';
 
-                video.style.transform = 'scale(1.03)';
+                video.style.transform =
+                    'scale(1.03)';
 
             });
 
 
 
-            // MOUSE MOVE
+            // ------------------------------------
+            // FOLLOW MOUSE
+            // ------------------------------------
 
             video.addEventListener('mousemove', (e) => {
 
@@ -302,13 +380,16 @@
 
 
 
+            // ------------------------------------
             // MOUSE LEAVE
+            // ------------------------------------
 
             video.addEventListener('mouseleave', () => {
 
                 projectCursor.style.opacity = '0';
 
-                video.style.transform = 'scale(1)';
+                video.style.transform =
+                    'scale(1)';
 
             });
 
@@ -319,11 +400,19 @@
 
         // ========================================
         // CAR VIDEO
-        // PLAY FROM 3s → 25s
+        // START AT 3s
+        // LOOP BACK TO 3s AT 25s
         // ========================================
 
         const video3 =
             document.getElementById('video3');
+
+
+        video3.addEventListener('loadedmetadata', () => {
+
+            video3.currentTime = 3;
+
+        });
 
 
         video3.addEventListener('timeupdate', () => {
@@ -339,6 +428,7 @@
             }
 
         });
+
 
     </script>
 
