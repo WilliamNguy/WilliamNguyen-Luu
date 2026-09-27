@@ -16,6 +16,32 @@
 
         const basker = new FontFace('BaskerItalic', 'url(assets/fonts/BaskerItalic.ttf)');
         basker.load().then(font => document.fonts.add(font));
+       
+        const nohemiRegular = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-Regular.ttf)',
+    { weight: '400' }
+);
+
+const nohemiMedium = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-Medium.ttf)',
+    { weight: '500' }
+);
+
+const nohemiSemiBold = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-SemiBold.ttf)',
+    { weight: '600' }
+);
+
+Promise.all([
+    nohemiRegular.load(),
+    nohemiMedium.load(),
+    nohemiSemiBold.load()
+]).then(fonts => {
+    fonts.forEach(font => document.fonts.add(font));
+});
     </script>
 </head>
 

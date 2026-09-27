@@ -19,7 +19,7 @@ designerSubtitle.textContent = '3D Artist & Digital Designer';
 
 Object.assign(designerSubtitle.style, {
     position: 'absolute',
-    top: '8.5vh',
+    top: '8vh',
     left: '3vw',
     fontSize: '0.7vw',
     color: '#222',

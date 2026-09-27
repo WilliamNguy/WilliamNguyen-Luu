@@ -27,6 +27,32 @@
             'url(assets/fonts/BaskerItalic.ttf)'
         );
         basker.load().then(font => document.fonts.add(font));
+
+        const nohemiRegular = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-Regular.ttf)',
+    { weight: '400' }
+);
+
+const nohemiMedium = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-Medium.ttf)',
+    { weight: '500' }
+);
+
+const nohemiSemiBold = new FontFace(
+    'Nohemi',
+    'url(assets/fonts/Nohemi-SemiBold.ttf)',
+    { weight: '600' }
+);
+
+Promise.all([
+    nohemiRegular.load(),
+    nohemiMedium.load(),
+    nohemiSemiBold.load()
+]).then(fonts => {
+    fonts.forEach(font => document.fonts.add(font));
+});
     </script>
 
 
@@ -241,7 +267,7 @@
 
             width: '40vw',
 
-            fontFamily: 'Lexend',
+            fontFamily: 'Nohemi',
 
             color: '#FFEA00',
 
@@ -307,52 +333,39 @@
 
                 projectCursor.innerHTML = `
 
-
-                    <!-- TITLE -->
-
-                    <div style="
-                        font-size: 3.5vw;
-                        font-weight: bold;
-                        line-height: 1;
-                        margin-bottom: 0.7vw;
-                        white-space: nowrap;
-                    ">
-
-                        ${video.dataset.title}
-
-                    </div>
+    <div style="
+        font-family: 'Nohemi';
+        font-size: 3.5vw;
+        font-weight: 600;
+        line-height: 1;
+        margin-bottom: 0.7vw;
+        white-space: nowrap;
+    ">
+        ${video.dataset.title}
+    </div>
 
 
-
-                    <!-- TYPE -->
-
-                    <div style="
-                        font-size: 0.9vw;
-                        font-weight: 500;
-                        margin-bottom: 0.8vw;
-                    ">
-
-                        ${video.dataset.type}
-
-                    </div>
+    <div style="
+        font-family: 'Nohemi';
+        font-size: 0.9vw;
+        font-weight: 500;
+        margin-bottom: 0.8vw;
+    ">
+        ${video.dataset.type}
+    </div>
 
 
+    <div style="
+        font-family: 'Nohemi';
+        font-size: 0.8vw;
+        line-height: 1.5;
+        font-weight: 400;
+        text-align: justify;
+    ">
+        ${vfxDescription}
+    </div>
 
-                    <!-- DESCRIPTION -->
-
-                    <div style="
-                        font-size: 0.8vw;
-                        line-height: 1.5;
-                        font-weight: 400;
-                        text-align: justify;
-
-                    ">
-
-                        ${vfxDescription}
-
-                    </div>
-
-                `;
+`;
 
 
                 projectCursor.style.opacity = '1';

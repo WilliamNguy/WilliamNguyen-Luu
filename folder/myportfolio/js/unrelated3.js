@@ -1,17 +1,33 @@
 window.addEventListener('DOMContentLoaded', () => {
 
     // =============================
+    // Load Nohemi Fonts
+    // =============================
+
+    const nohemiExtraLight = new FontFace(
+        'Nohemi',
+        'url(assets/fonts/Nohemi-ExtraLight.ttf)',
+        { weight: '200' }
+    );
+
+    nohemiExtraLight.load().then(font => {
+        document.fonts.add(font);
+    });
+
+
+    // =============================
     // Custom "click me" cursor
     // =============================
+
     const customCursor = document.createElement('div');
     customCursor.textContent = 'click me';
 
     Object.assign(customCursor.style, {
         position: 'fixed',
         pointerEvents: 'none',
-        fontFamily: 'Lexend',
+        fontFamily: 'Nohemi',
         fontSize: '4.5vw',
-        fontWeight: 'bold',
+        fontWeight: '200',
         color: '#fbd84e',
         transform: 'translate(-50%, -50%)',
         zIndex: '100',
@@ -25,9 +41,11 @@ window.addEventListener('DOMContentLoaded', () => {
         customCursor.style.top = e.clientY + 'px';
     });
 
+
     // =============================
     // Top Navigation Bar
     // =============================
+
     const projectsLabel = document.createElement('div');
     projectsLabel.textContent = 'William Nguyen-Luu';
 
@@ -40,12 +58,22 @@ window.addEventListener('DOMContentLoaded', () => {
         cursor: 'pointer'
     });
 
-    projectsLabel.classList.add('nav-item', 'projects-page-label');
+    projectsLabel.classList.add(
+        'nav-item',
+        'projects-page-label'
+    );
+
     projectsLabel.addEventListener('click', () => {
         window.location.href = 'index.html?zoom=true';
     });
 
+
+    // =============================
+    // Navigation Links
+    // =============================
+
     const navBar = document.createElement('div');
+
     Object.assign(navBar.style, {
         position: 'fixed',
         top: '4vh',
@@ -58,12 +86,26 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     navBar.innerHTML = `
-    <span id="nav-projects" class="nav-item">portfolio</span>
-    <span id="nav-work" class="nav-item">work</span>
-    <span id="nav-about" class="nav-item">about</span>
-  `;
+        <span id="nav-projects" class="nav-item">
+            portfolio
+        </span>
+
+        <span id="nav-work" class="nav-item">
+            work
+        </span>
+
+        <span id="nav-about" class="nav-item">
+            about
+        </span>
+    `;
+
+
+    // =============================
+    // Top Bar
+    // =============================
 
     const topBar = document.createElement('div');
+
     Object.assign(topBar.style, {
         position: 'fixed',
         top: '0',
@@ -80,43 +122,71 @@ window.addEventListener('DOMContentLoaded', () => {
 
     topBar.appendChild(projectsLabel);
     topBar.appendChild(navBar);
+
     document.body.appendChild(topBar);
+
 
     // =============================
     // Main Content
     // =============================
+
     const content = document.createElement('div');
+
     Object.assign(content.style, {
         marginTop: '20vh',
         marginLeft: '20vw',
         width: '60vw',
-        fontFamily: 'Lexend'
+        fontFamily: 'Nohemi'
     });
 
+
+    // =============================
+    // Project Title
+    // =============================
+
     const title = document.createElement('h1');
-    title.textContent = 'Unrelated Project 3';
+
+    title.textContent =
+        'Basketball — Generative Soundscape';
 
     Object.assign(title.style, {
-        fontSize: '2vw',
+        fontFamily: 'Nohemi',
+        fontSize: '2.5vw',
+
+        // Nohemi ExtraLight
+        fontWeight: '200',
+
+        lineHeight: '1.1',
         marginBottom: '2vh'
     });
 
+
+    // =============================
+    // Project Description
+    // =============================
+
     const description = document.createElement('p');
+
     description.textContent =
-        'Write a short description here. Explain what the video shows and what the project is about.';
+        'An immersive generative soundscape recreating the atmosphere and energy of an indoor basketball game. Sounds including ball impacts, sneaker squeaks, net swishes, whistles, player voices, and crowd ambience were either recorded by us or collected from online sources. Built in Max/MSP, the recordings were layered and manipulated through randomized playback, pitch variation, gain changes, and granular synthesis. These sounds continuously combine and shift to create an evolving audio environment that captures the feeling of being inside a live basketball game.';
 
     Object.assign(description.style, {
+        fontFamily: 'Nohemi',
         fontSize: '1vw',
+
+        // Nohemi ExtraLight
+        fontWeight: '200',
+
         lineHeight: '1.6',
+        maxWidth: '50vw',
         marginBottom: '4vh'
     });
 
-    // =============================
-    // Video
-    // =============================
 
     content.appendChild(title);
     content.appendChild(description);
+
+
     // =============================
     // YouTube Video
     // =============================
@@ -131,10 +201,16 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.youtube.com/embed/JhpiVO5xsrw';
-    iframe.title = 'YouTube video player';
+
+    iframe.src =
+        'https://www.youtube.com/embed/JhpiVO5xsrw';
+
+    iframe.title =
+        'Basketball Generative Soundscape';
+
     iframe.allow =
         'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+
     iframe.allowFullscreen = true;
 
     Object.assign(iframe.style, {
@@ -145,7 +221,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     videoWrapper.appendChild(iframe);
     content.appendChild(videoWrapper);
+
+
+    // =============================
+    // Project Image
+    // =============================
+
     const image2 = document.createElement('img');
+
     image2.src = 'assets/images/ss2.png';
 
     Object.assign(image2.style, {
@@ -156,19 +239,34 @@ window.addEventListener('DOMContentLoaded', () => {
 
     content.appendChild(image2);
 
-    document.body.appendChild(content);
 
     // =============================
-    // Navigation clicks
+    // Add Content To Page
     // =============================
-    document.getElementById('nav-projects').addEventListener('click', () => {
-        window.location.href = 'index1.html';
-    });
-    document.getElementById('nav-work').addEventListener('click', () => {
-        window.location.href = 'index2.html';
-    });
-    document.getElementById('nav-about').addEventListener('click', () => {
-        window.location.href = 'index3.html';
-    });
+
+    document.body.appendChild(content);
+
+
+    // =============================
+    // Navigation Clicks
+    // =============================
+
+    document
+        .getElementById('nav-projects')
+        .addEventListener('click', () => {
+            window.location.href = 'index1.html';
+        });
+
+    document
+        .getElementById('nav-work')
+        .addEventListener('click', () => {
+            window.location.href = 'index2.html';
+        });
+
+    document
+        .getElementById('nav-about')
+        .addEventListener('click', () => {
+            window.location.href = 'index3.html';
+        });
 
 });

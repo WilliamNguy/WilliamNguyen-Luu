@@ -2,24 +2,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* cursor: pointer; */
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
-    /* cursor: pointer; */
     overflow-y: auto;
-    /* Enable vertical scrolling */
 }
 
-/* Base nav item style */
+
+/* ========================================
+   NAVIGATION
+======================================== */
+
 .nav-item {
     transition: color 0.3s ease;
     cursor: pointer;
 }
 
-/* Default hover for all nav items */
 .nav-item:hover {
     color: #F9E387;
     font-weight: bold;
@@ -31,30 +31,29 @@ body {
     display: inline;
 }
 
-/* Hover override for label */
 .projects-page-label:hover {
     color: #F9E387;
     font-weight: bold;
-
 }
 
-/* Project Grid Layout */
+
+/* ========================================
+   PROJECT GRID
+======================================== */
+
 .project-grid {
     display: flex;
     flex-direction: column;
-    /* Stack rows vertically */
     gap: 10vh;
     margin-top: 20vh;
     margin-left: 25vw;
 }
 
-/* Each row of images */
 .project-row {
     display: flex;
     gap: 10vw;
 }
 
-/* Image Styling */
 .project-grid img {
     width: 20vw;
     height: 28vh;
@@ -68,19 +67,21 @@ body {
     transform: scale(1.25);
 }
 
-/* Ensures hovered media sits above blur overlay */
 .project-grid img.hovered,
 .project-grid video.hovered {
     z-index: 10;
     position: relative;
-    /* ensures z-index takes effect */
 }
 
 .project-grid video {
     cursor: none;
 }
 
-/* Blur effect when hovering */
+
+/* ========================================
+   BLUR EFFECT
+======================================== */
+
 .main-content.blur-active {
     filter: blur(5px);
     transition: filter 0.5s ease;
@@ -94,7 +95,6 @@ body {
     height: 100vh;
     backdrop-filter: blur(5px);
     z-index: 0;
-    /* Below everything else */
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -104,71 +104,183 @@ body {
     opacity: 1;
 }
 
-.about-text-box {
-    position: absolute;
-    top: 45%;
-    left: 20vw;
-    transform: translateY(-50%);
-    width: 30vw;
-    /* background-color: #f9f9f9; */
-    padding: 3vh 2vw;
-    border-radius: 1px;
-    /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); */
-    font-family: 'NewFont', sans-serif;
-    font-size: 1.2vw;
-    line-height: 1.5;
-}
 
-.profile-wrapper {
-    position: absolute;
-    left: 20vw;
-    top: 60vh;
-    transform: translateY(-50%);
-}
-
-.profile-photo {
-    width: 20vw;
-    top: 60vh;
-    /* border-radius: 8px; */
-    object-fit: cover;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+/* ========================================
+   ABOUT PAGE
+======================================== */
 
 .about-heading {
     position: absolute;
     top: 15vh;
     left: 50%;
     transform: translateX(-50%);
+
     font-size: 1.2vw;
     font-family: 'Lexend', sans-serif;
+
     color: #000000;
     z-index: 10;
 }
 
+
+/* ========================================
+   PROFILE + DESCRIPTION WRAPPER
+======================================== */
+
+.profile-wrapper {
+    position: absolute;
+
+    top: 30vh;
+    left: 20vw;
+
+    transform: none;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    /* slightly smaller gap */
+    gap: 4vw;
+}
+
+
+/* ========================================
+   LEFT PROFILE COLUMN
+======================================== */
+
+.profile-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* PROFILE PHOTO */
+
+.profile-photo {
+    /* slightly smaller */
+    width: 18vw;
+
+    height: auto;
+    object-fit: cover;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ========================================
+   SOFTWARE LOGOS
+======================================== */
+
+.software-logos {
+    display: flex;
+
+    /* slightly smaller spacing */
+    gap: 0.7vw;
+
+    margin-top: 2vh;
+
+    flex-wrap: wrap;
+    justify-content: center;
+
+    /* matches new photo width */
+    max-width: 18vw;
+}
+
+.software-logos img {
+    /* slightly smaller */
+    width: 1.35vw;
+    height: 1.35vw;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+}
+
+.software-logos img:hover {
+    transform: scale(1.5);
+    opacity: 0.8;
+}
+
+
+/* ========================================
+   ABOUT DESCRIPTION
+======================================== */
+
+.about-text-box {
+    position: static;
+
+    /* slightly smaller */
+    width: 27vw;
+
+    padding: 0;
+    margin: 0;
+
+    transform: none;
+
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 200;
+
+    /* slightly smaller */
+    font-size: 1.08vw;
+
+    line-height: 1.5;
+}
+
+.about-text-box p {
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 200;
+}
+
+.about-text-box a {
+    font-family: 'Nohemi', sans-serif;
+    font-weight: 200;
+
+    color: inherit;
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+
+/* ========================================
+   ANIMATED LINE
+======================================== */
+
 .animated-line {
     position: absolute;
+
     top: 25vh;
-    /* adjust vertical position */
     left: 20vw;
-    /* starting X */
+
     height: 2px;
     width: 0;
+
     background-color: #000;
+
     transition: width 1s ease-in-out;
+
     z-index: 5;
 }
 
 .animated-line.expand {
     width: 60vw;
-    /* final length */
 }
+
+
+/* ========================================
+   UNRELATED / EXPERIMENTAL PROJECTS
+======================================== */
 
 .unrelated-section {
     margin-top: 20vh;
     margin-left: 26vw;
-    /* controls horizontal position */
     margin-bottom: 20vh;
-    /* adds extra scroll space */
 
     display: flex;
     flex-direction: column;
@@ -183,67 +295,22 @@ body {
 
 .unrelated-list li {
     list-style: disc;
+
     font-family: 'Lexend', sans-serif;
+
     font-size: 1vw;
     font-style: italic;
+
     text-decoration: underline;
     text-underline-offset: 4px;
+
     line-height: 2.2;
+
     cursor: pointer;
 }
 
 .unrelated-list li:hover {
     color: #fbd84e;
-}
-
-.profile-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.software-logos {
-    display: flex;
-    gap: 0.8vw;
-    margin-top: 2vh;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 20vw;
-}
-
-.software-logos img {
-    width: 1.5vw;
-    height: 1.5vw;
-    object-fit: contain;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.software-logos img:hover {
-    transform: scale(1.5);
-    opacity: 0.8;
-}
-
-.profile-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* ========================================
-   INDIVIDUAL PROJECT PAGE
-======================================== */
-
-.project-info {
-    width: 90vw;
-    margin: 0 auto;
-    padding-top: 18vh;
-    padding-bottom: 10vh;
-
-    display: grid;
-    grid-template-columns: 1.2fr 1.5fr 1fr;
-    gap: 6vw;
-
-    font-family: 'Lexend', sans-serif;
 }
 
 
@@ -254,43 +321,64 @@ body {
 .project-info {
     width: 84vw;
     margin: 0 auto;
+
     padding-top: 18vh;
     padding-bottom: 10vh;
 
     display: flex;
     flex-direction: column;
+
     gap: 3vh;
 
-    font-family: 'Lexend', sans-serif;
+    font-family: 'Nohemi', sans-serif;
 }
 
 
-/* PROJECT TITLE */
+/* ========================================
+   PROJECT TITLE
+======================================== */
 
 .project-heading h1 {
     margin: 0;
 
-    font-family: 'Lexend', sans-serif;
+    font-family: 'Nohemi', sans-serif;
+
     font-size: 1vw;
-    font-weight: 500;
+    font-weight: 600;
+
     letter-spacing: -0.05em;
 }
+
+
+/* ========================================
+   PROJECT TYPE
+======================================== */
 
 .project-type {
     margin-top: 1vh;
     margin-bottom: 0;
 
+    font-family: 'Nohemi', sans-serif;
+
     font-size: 0.8vw;
+    font-weight: 500;
+
     opacity: 0.6;
 }
 
 
-/* DESCRIPTION */
+/* ========================================
+   PROJECT DESCRIPTION
+======================================== */
 
 .project-description {
     width: 45vw;
 
+    font-family: 'Nohemi', sans-serif;
+
     font-size: 0.6vw;
+    font-weight: 400;
+
     line-height: 1.6;
 }
 
@@ -299,11 +387,14 @@ body {
 }
 
 
-/* ROLE + TOOLS */
+/* ========================================
+   ROLE + TOOLS
+======================================== */
 
 .project-details {
     display: flex;
     flex-direction: row;
+
     gap: 6vw;
 
     font-size: 0.60vw;
@@ -321,7 +412,9 @@ body {
 }
 
 
-/* IMAGE GALLERY */
+/* ========================================
+   IMAGE GALLERY
+======================================== */
 
 .project-gallery {
     display: flex;
@@ -338,30 +431,12 @@ body {
     height: auto;
 
     display: block;
+
     border-radius: 0;
 
     object-fit: cover;
 }
 
-
-/* IMAGE GALLERY */
-
-.project-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    gap: 4vw;
-
-    padding: 0 5vw 15vh 5vw;
-}
-
-.project-gallery img {
-    width: 40vw;
-    height: auto;
-    display: block;
-    object-fit: cover;
-}
 
 /* ========================================
    MOTION PAGE
@@ -395,7 +470,9 @@ body {
 }
 
 
-/* INFORMATION BETWEEN ROWS */
+/* ========================================
+   INFORMATION BETWEEN MOTION ROWS
+======================================== */
 
 .motion-info {
     width: 100%;
@@ -405,12 +482,13 @@ body {
     padding-bottom: 8vh;
 }
 
-
 .motion-info .project-heading h2 {
     margin: 0;
 
-    font-family: 'Lexend', sans-serif;
+    font-family: 'Nohemi', sans-serif;
+
     font-size: 2vw;
     font-weight: 500;
+
     letter-spacing: -0.04em;
 }

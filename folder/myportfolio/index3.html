@@ -4,63 +4,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>William Nguyen-Luu</title>
+
   <link rel="stylesheet" href="css/projects.css">
+
   <script>
-    const lexend = new FontFace('Lexend', 'url(assets/fonts/Lexend.ttf)');
+    const lexend = new FontFace(
+      'Lexend',
+      'url(assets/fonts/Lexend.ttf)'
+    );
     lexend.load().then(font => document.fonts.add(font));
 
-    const notable = new FontFace('Notable', 'url(assets/fonts/Notable.ttf)');
+    const notable = new FontFace(
+      'Notable',
+      'url(assets/fonts/Notable.ttf)'
+    );
     notable.load().then(font => document.fonts.add(font));
 
-    const basker = new FontFace('BaskerItalic', 'url(assets/fonts/BaskerItalic.ttf)');
+    const basker = new FontFace(
+      'BaskerItalic',
+      'url(assets/fonts/BaskerItalic.ttf)'
+    );
     basker.load().then(font => document.fonts.add(font));
 
-    const sans = new FontFace('DmSans', 'url(assets/fonts/DmSans1.ttf)');
+    const sans = new FontFace(
+      'DmSans',
+      'url(assets/fonts/DmSans1.ttf)'
+    );
     sans.load().then(font => document.fonts.add(font));
 
-    const newFont = new FontFace('NewFont', 'url(assets/fonts/DmSans1.ttf)');
-    newFont.load().then(font => document.fonts.add(font));
+
+    // =============================
+    // NOHEMI EXTRA LIGHT
+    // =============================
+
+    const nohemiExtraLight = new FontFace(
+      'Nohemi',
+      'url(assets/fonts/Nohemi-ExtraLight.ttf)',
+      { weight: '200' }
+    );
+
+    nohemiExtraLight.load().then(font => {
+      document.fonts.add(font);
+    });
+
   </script>
+
+
+  <style>
+
+    /*
+       ONLY change the typography.
+       Your existing projects.css still controls
+       the actual About page layout.
+    */
+
+    .about-text-box {
+      font-family: 'Nohemi', sans-serif;
+      font-weight: 200;
+    }
+
+    .about-text-box p {
+      font-family: 'Nohemi', sans-serif;
+      font-weight: 200;
+
+      /* Removes default paragraph offset */
+      margin-top: 0;
+    }
+
+    .about-text-box a {
+      font-family: 'Nohemi', sans-serif;
+      font-weight: 200;
+      color: inherit;
+    }
+
+  </style>
+
 </head>
 
+
 <body>
+
   <div class="about-page">
-    <h1 class="about-heading">About Me</h1>
+
+    <h1 class="about-heading">
+      About Me
+    </h1>
+
 
     <div class="profile-wrapper">
 
+
+      <!-- PROFILE IMAGE + SOFTWARE -->
+
       <div class="profile-column">
-        <img src="assets/images/portfoliopic.jpeg" alt="me" class="profile-photo">
+
+        <img
+          src="assets/images/portfoliopic.jpeg"
+          alt="William Nguyen-Luu"
+          class="profile-photo"
+        >
+
 
         <div class="software-logos">
+
           <img src="assets/images/logoP.png" alt="Python">
+
           <img src="assets/images/logoJ.png" alt="JavaScript">
+
           <img src="assets/images/logoH.png" alt="HTML5">
+
           <img src="assets/images/logoCss.png" alt="CSS3">
+
           <img src="assets/images/logoC.png" alt="CreativeCloud">
+
           <img src="assets/images/logoF.png" alt="Figma">
+
           <img src="assets/images/logoM.png" alt="MaxMSP">
+
           <img src="assets/images/logoU.png" alt="Unity">
+
           <img src="assets/images/logoB.png" alt="Blender">
+
         </div>
+
       </div>
+
+
+      <!-- ABOUT DESCRIPTION -->
 
       <div class="about-text-box">
+
         <p>
-          Hey! I’m William, a Canadian artist based in Montreal. I’m currently completing my undergraduate degree in the
-          BFA Specialization in Computation Arts, where I explore the intersection of art and technology. My work
-          focuses primarily on 3D modelling and animation using Blender, combining technical precision with a strong
-          interest in visual storytelling and digital environments. I also have experience in creative coding and
-          developed this website using JavaScript to showcase my work and document my evolving practice.
+          Hey! I’m William, a Canadian artist based in Montreal,
+          currently completing a BFA Specialization in Computation Arts.
+          My work explores the intersection of art and technology, with
+          a focus on 3D modelling, animation, and digital environments.
+          Using Blender, I’m interested in creating visually engaging
+          work through modelling, lighting, materials, motion, and
+          experimentation.
+
           <br><br>
-          Contact: william.nguyen@gmail.com
+
+          My practice also extends into creative coding and interactive
+          media, allowing me to explore different ways of combining
+          visual design and technology. This website was designed and
+          developed by me using JavaScript as a space to showcase my
+          work and evolving creative practice.
+
+          <br><br>
+
+          Contact:
+          <a href="mailto:william.nguyen@gmail.com">
+            william.nguyen@gmail.com
+          </a>
+
         </p>
+
       </div>
+
+
     </div>
+
   </div>
 
+
   <script src="js/about.js"></script>
+
 </body>
 
 </html>
