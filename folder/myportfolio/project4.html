@@ -9,14 +9,9 @@
     <link rel="stylesheet" href="css/projects.css" />
     <style>
         #project-container img {
-            width: min(26vw, 360px);
+            width: 36vw;
             height: auto;
-        }
-
-        @media (max-width: 700px) {
-            #project-container img {
-                width: 40vw;
-            }
+            flex: 0 0 36vw;
         }
     </style>
     <script>
@@ -59,7 +54,7 @@ Promise.all([
 
 <body>
     <div id="project-container"
-        style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 3vw; padding: 15vh 5vw;">
+        style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 4vw; padding: 15vh 5vw;">
         <img src="assets/images/Prada.png" alt="Prada 3D model">
         <img src="assets/images/burp.png" alt="Burp 3D model">
         <img src="assets/images/vale.png" alt="Vale 3D model">
