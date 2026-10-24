@@ -112,7 +112,7 @@ video5.addEventListener('loadedmetadata', () => {
     row3.appendChild(video5);
 
     const img6 = document.createElement('img');
-    img6.src = 'assets/images/carPic.png';
+    img6.src = 'assets/images/CarPic.png';
     img6.addEventListener('click', () => window.location.href = 'project6.html');
 
     row3.appendChild(img6);
