@@ -53,3 +53,14 @@ body {
 .project-grid img:hover {
   transform: scale(1.05);
 }
+
+.home-video {
+  --home-video-target-width: 720px;
+  --home-video-slide: 100svh;
+  top: 50%;
+  left: 50%;
+  width: min(var(--home-video-target-width), 90vw, max(1px, 100svh - 160px));
+  aspect-ratio: 1;
+  height: auto;
+  transform: translate(-50%, calc(-50% + var(--home-video-slide)));
+}

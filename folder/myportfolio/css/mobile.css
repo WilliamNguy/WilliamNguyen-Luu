@@ -2,6 +2,20 @@
     display: none;
 }
 
+@font-face {
+    font-family: 'Lexend Black';
+    src: url('../assets/fonts/Lexend.ttf') format('truetype');
+    font-weight: 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nohemi Black';
+    src: url('../assets/fonts/Nohemi-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-display: swap;
+}
+
 /* Narrow windows and touch phones in both orientations. */
 @media (max-width: 767px), (max-width: 950px) and (pointer: coarse) {
     :root {
@@ -79,6 +93,60 @@
         display: none;
     }
 
+    .portfolio-home:has(.phone-intro[open]) {
+        overflow: hidden !important;
+    }
+
+    .phone-intro {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        padding: 0;
+        border: 0;
+        background: linear-gradient(white 50%, black 50%);
+        overscroll-behavior: contain;
+    }
+
+    .phone-intro form, .phone-intro button {
+        width: 100%;
+        height: 100%;
+    }
+
+    .phone-intro button {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        justify-items: center;
+        padding: 0 var(--page-gutter);
+        border: 0;
+        background: transparent;
+        font-size: clamp(28px, min(10vw, 16svh), 68px);
+        cursor: pointer;
+    }
+
+    .phone-intro-first {
+        align-self: end;
+        margin-bottom: 5svh;
+        color: black;
+        font-family: Lexend, sans-serif;
+    }
+
+    .phone-intro-last {
+        align-self: start;
+        margin-top: 5svh;
+        color: white;
+        font-family: BaskerItalic, Georgia, serif;
+    }
+
+    .phone-intro-hint {
+        position: absolute;
+        bottom: max(24px, env(safe-area-inset-bottom));
+        color: white;
+        font: 14px Lexend, sans-serif;
+    }
+
     .portfolio-home :is(.home-name, .home-video, .site-subtitle, .site-nav) {
         position: static !important;
         inset: auto !important;
@@ -104,9 +172,7 @@
 
     .home-video {
         display: block;
-        width: min(100%, 640px) !important;
-        max-height: 55svh;
-        height: auto;
+        width: min(100%, var(--home-video-target-width), 55svh);
         object-fit: contain !important;
         z-index: auto !important;
     }
@@ -229,5 +295,42 @@
         min-height: 44px;
         padding: 9px 0;
         color: inherit;
+    }
+
+    a.portfolio-category, details.mobile-caption > summary {
+        padding: 12px 0;
+        color: #896500;
+        font: 900 clamp(17px, 5vw, 22px) / 1.2 'Lexend Black', Lexend, sans-serif;
+        text-transform: uppercase;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+    }
+
+    #vfx-gallery details.mobile-caption > summary {
+        font-family: 'Nohemi Black', Nohemi, sans-serif;
+    }
+
+    details.mobile-caption > p {
+        padding: 12px 2px 0;
+    }
+}
+
+@media (min-width: 540px) and (max-width: 950px) and (max-height: 500px) and (pointer: coarse) {
+    .portfolio-home {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: 1fr auto 1fr;
+        justify-items: center;
+        gap: 8px 16px;
+    }
+
+    .portfolio-home .home-name { grid-area: 1 / 1; align-self: end; }
+    .home-name > div { font-size: clamp(26px, 5vw, 46px) !important; }
+    .portfolio-home .site-subtitle { grid-area: 2 / 1; }
+    .portfolio-home .site-nav { grid-area: 3 / 1; align-self: start; }
+
+    .portfolio-home .home-video {
+        grid-area: 1 / 2 / 4 / 3;
+        width: min(100%, 100svh - 48px);
     }
 }

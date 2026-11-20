@@ -70,36 +70,12 @@ video.playsInline = true; // Important for autoplay on mobile
 
 Object.assign(video.style, {
     position: 'absolute',
-    bottom: '0',
-    left: '50%',
-    transform: 'translate(-50%, 100vh)',
-    width: '50vw',
-    maxWidth: '90%',
-    height: 'auto',
     transition: 'transform 0.5s ease, opacity 0.5s ease',
     zIndex: '-1',
     opacity: '0',
     objectFit: 'cover', // ✅ this removes black bars
 });
 document.body.appendChild(video);
-// === Mouse controls video playback ===
-let stopTimer;
-
-document.addEventListener('mousemove', () => {
-
-    if (phoneLayout.matches) return;
-
-    // Only play once the video has appeared
-    if (scale > 1.5) {
-        video.play();
-
-        clearTimeout(stopTimer);
-
-        stopTimer = setTimeout(() => {
-            video.pause();
-        }, 20);
-    }
-});
 
 // === Name Container ===
 const container = document.createElement('div');
@@ -297,6 +273,7 @@ function updateScene(scale) {
     // Fade-in video
     if (scale > 1.5) {
         video.style.opacity = '1';
+        if (video.paused) video.play().catch(() => {});
     } else {
         video.style.opacity = '0';
         video.pause();
@@ -312,19 +289,9 @@ function updateScene(scale) {
         bottomHalf.style.transform = `translateY(0%)`; // fully visible
     }
 
-    // Slide donut image upward into view
-    if (scale > 1 && scale <= 4) {
-        const slidePercent = Math.min((scale - 1) / 3, 1);
-        const startPx = window.innerHeight;
-        const endPx = window.innerHeight * 0.12; // ~20% from top
-        const currentPx = startPx - slidePercent * (startPx - endPx);
-        video.style.transform = `translate(-50%, ${currentPx}px)`;
-    } else if (scale > 4) {
-        const finalPx = window.innerHeight * 0.12;
-        video.style.transform = `translate(-50%, ${finalPx}px)`;
-    } else {
-        video.style.transform = `translate(-50%, ${window.innerHeight}px)`;
-    }
+    // Slide from below the viewport to the center of the hero.
+    const slideProgress = Math.max(0, Math.min((scale - 1) / 3, 1));
+    video.style.setProperty('--home-video-slide', `${(1 - slideProgress) * 100}svh`);
 
     // Show "Projects" label after scale 4.5
  // Show name + designer subtitle after scale 4.5
@@ -347,7 +314,8 @@ if (scale > 4.5) {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('zoom') === 'true') {
+const skipIntro = urlParams.get('zoom') === 'true';
+if (skipIntro) {
     const target = 5.5;
     const step = 0.05;
 
@@ -364,14 +332,51 @@ if (urlParams.get('zoom') === 'true') {
     requestAnimationFrame(animateZoom);
 }
 
-function syncHomeVideo() {
-    clearTimeout(stopTimer);
-    video.autoplay = phoneLayout.matches;
-    video.controls = phoneLayout.matches;
-    if (phoneLayout.matches) {
-        video.poster = 'assets/images/donut.png';
-        video.play().catch(() => {});
+const phoneIntro = document.querySelector('.phone-intro');
+let introDismissed = skipIntro;
+
+async function dismissPhoneIntro(event) {
+    event.preventDefault();
+    if (introDismissed) return;
+    introDismissed = true;
+
+    // Start muted playback while the tap is still an active user gesture.
+    video.play().catch(() => {});
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const timing = { duration: 600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' };
+        const introSlide = phoneIntro.animate(
+            [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }],
+            { ...timing, fill: 'forwards' }
+        );
+        video.animate([{ translate: '0 100svh' }, { translate: '0 0' }], timing);
+        await introSlide.finished.catch(() => {});
+        phoneIntro.close();
+        introSlide.cancel();
     } else {
+        phoneIntro.close();
+    }
+    syncHomeVideo();
+}
+
+phoneIntro.addEventListener('submit', dismissPhoneIntro);
+phoneIntro.addEventListener('cancel', dismissPhoneIntro);
+
+function syncHomeVideo() {
+    if (phoneLayout.matches) {
+        if (!introDismissed && scale < 4.5 && !phoneIntro.open) {
+            phoneIntro.showModal();
+        }
+        video.poster = 'assets/images/donut.png';
+        video.autoplay = !phoneIntro.open;
+        if (phoneIntro.open) {
+            video.pause();
+        } else {
+            video.play().catch(() => {});
+        }
+    } else {
+        if (phoneIntro.open) phoneIntro.close();
+        video.autoplay = false;
         video.removeAttribute('poster');
         video.pause();
         updateScene(scale);

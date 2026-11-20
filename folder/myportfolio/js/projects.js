@@ -137,7 +137,7 @@ img6.dataset.category = 'VFX';
         [img6, 'project6.html', 'VFX']
     ].forEach(([media, href, title]) => {
         const link = document.createElement('a');
-        link.className = 'mobile-caption';
+        link.className = 'mobile-caption portfolio-category';
         link.href = href;
         link.textContent = title;
         media.after(link);
