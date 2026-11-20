@@ -1,3 +1,5 @@
+const phoneLayout = window.matchMedia('(max-width: 767px), (max-width: 950px) and (pointer: coarse)');
+
 // === Background Setup ===
 document.body.style.margin = '0';
 document.body.style.padding = '0';
@@ -8,6 +10,7 @@ document.body.style.cursor = 'none';
 
 // === Custom Circle Cursor ===
 const customCursor = document.createElement('div');
+customCursor.classList.add('pointer-decoration');
 
 Object.assign(customCursor.style, {
     position: 'fixed',
@@ -30,6 +33,7 @@ document.addEventListener('mousemove', (e) => {
 
 // Top half (white)
 const topHalf = document.createElement('div');
+topHalf.classList.add('home-backdrop');
 Object.assign(topHalf.style, {
     position: 'absolute',
     top: '0',
@@ -43,6 +47,7 @@ document.body.appendChild(topHalf);
 
 // Bottom half (black)
 const bottomHalf = document.createElement('div');
+bottomHalf.classList.add('home-backdrop');
 Object.assign(bottomHalf.style, {
     position: 'absolute',
     bottom: '0',
@@ -56,6 +61,7 @@ Object.assign(bottomHalf.style, {
 document.body.appendChild(bottomHalf);
 
 const video = document.createElement('video');
+video.classList.add('home-video');
 video.src = 'assets/videos/main_moving.mp4'; // 🎥 your looped video path
 video.autoplay = false;
 video.loop = true;
@@ -81,6 +87,8 @@ let stopTimer;
 
 document.addEventListener('mousemove', () => {
 
+    if (phoneLayout.matches) return;
+
     // Only play once the video has appeared
     if (scale > 1.5) {
         video.play();
@@ -95,6 +103,7 @@ document.addEventListener('mousemove', () => {
 
 // === Name Container ===
 const container = document.createElement('div');
+container.classList.add('home-name');
 Object.assign(container.style, {
     position: 'absolute',
     top: '50%',
@@ -140,6 +149,7 @@ container.appendChild(lastName);
 [firstName, lastName].forEach(name => {
     name.style.cursor = 'none';
     name.addEventListener('click', () => {
+        if (phoneLayout.matches) return;
         const target = 5.5;
         const step = 0.05;
 
@@ -160,6 +170,7 @@ container.appendChild(lastName);
 
 // === Projects Label ===
 const projectsLabel = document.createElement('div');
+projectsLabel.classList.add('site-brand');
 projectsLabel.textContent = 'William Nguyen-Luu';
 Object.assign(projectsLabel.style, {
     position: 'absolute',
@@ -178,6 +189,7 @@ document.body.appendChild(projectsLabel);
 
 // === Designer Subtitle ===
 const designerSubtitle = document.createElement('div');
+designerSubtitle.classList.add('site-subtitle');
 designerSubtitle.textContent = '3D Artist & Digital Designer';
 
 Object.assign(designerSubtitle.style, {
@@ -201,6 +213,7 @@ projectsLabel.addEventListener('click', () => {
 
 // === Invisible Nav Bar ===
 const navBar = document.createElement('div');
+navBar.classList.add('site-nav');
 Object.assign(navBar.style, {
     position: 'absolute',
     top: '4vh',
@@ -262,6 +275,7 @@ let scale = 1;
 const maxZoom = 6;
 
 window.addEventListener('wheel', (e) => {
+    if (phoneLayout.matches) return;
     scale += e.deltaY * 0.0025;
     scale = Math.max(1, Math.min(scale, maxZoom));
     container.style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -270,6 +284,7 @@ window.addEventListener('wheel', (e) => {
 
 // === Scene Transition Logic ===
 function updateScene(scale) {
+    if (phoneLayout.matches) return;
     // Fade out name after scale 3
     if (scale > 3) {
         const fade = Math.max(0, 1 - (scale - 3) / 2);
@@ -348,3 +363,20 @@ if (urlParams.get('zoom') === 'true') {
 
     requestAnimationFrame(animateZoom);
 }
+
+function syncHomeVideo() {
+    clearTimeout(stopTimer);
+    video.autoplay = phoneLayout.matches;
+    video.controls = phoneLayout.matches;
+    if (phoneLayout.matches) {
+        video.poster = 'assets/images/donut.png';
+        video.play().catch(() => {});
+    } else {
+        video.removeAttribute('poster');
+        video.pause();
+        updateScene(scale);
+    }
+}
+
+phoneLayout.addEventListener('change', syncHomeVideo);
+if (phoneLayout.matches) syncHomeVideo();

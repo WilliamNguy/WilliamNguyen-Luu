@@ -20,6 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // =============================
 
 const customCursor = document.createElement('div');
+customCursor.classList.add('pointer-decoration');
 customCursor.textContent = 'click me';
 
 Object.assign(customCursor.style, {
@@ -48,6 +49,7 @@ document.addEventListener('mousemove', (e) => {
 
     const projectsLabel =
         document.createElement('div');
+    projectsLabel.classList.add('site-brand');
 
     projectsLabel.textContent =
         'William Nguyen-Luu';
@@ -90,6 +92,7 @@ document.addEventListener('mousemove', (e) => {
 
     const navBar =
         document.createElement('div');
+    navBar.classList.add('site-nav');
 
 
     Object.assign(navBar.style, {
@@ -136,6 +139,7 @@ document.addEventListener('mousemove', (e) => {
 
     const topBar =
         document.createElement('div');
+    topBar.classList.add('site-header');
 
 
     Object.assign(topBar.style, {
@@ -175,6 +179,7 @@ document.addEventListener('mousemove', (e) => {
 
     const content =
         document.createElement('div');
+    content.classList.add('experiment-content');
 
 
     Object.assign(content.style, {
@@ -352,12 +357,16 @@ document.addEventListener('mousemove', (e) => {
     image.addEventListener('click', () => {
 
         window.location.href =
-            'https://williamnguy.github.io/WilliamNguyen-Luu/screen/SCREENSAVER/index.html';
+            '../../screen/SCREENSAVER/index.html';
 
     });
 
 
-    content.appendChild(image);
+    const demoLink = document.createElement('a');
+    demoLink.className = 'mobile-caption';
+    demoLink.href = '../../screen/SCREENSAVER/index.html';
+    demoLink.textContent = 'Open Interactive Nostalgia';
+    content.append(image, demoLink);
 
 
     // =============================

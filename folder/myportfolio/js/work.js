@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Custom "click me" cursor (bold + yellow)
     // =============================
     const customCursor = document.createElement('div');
+    customCursor.classList.add('pointer-decoration');
     customCursor.textContent = 'lua candles';
 
     Object.assign(customCursor.style, {
@@ -33,6 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Top bar
     // =============================
     const projectsLabel = document.createElement('div');
+    projectsLabel.classList.add('site-brand');
     projectsLabel.textContent = 'William Nguyen-Luu';
 
     Object.assign(projectsLabel.style, {
@@ -52,6 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     const navBar = document.createElement('div');
+    navBar.classList.add('site-nav');
     Object.assign(navBar.style, {
         position: 'fixed',
         top: '4vh',
@@ -72,6 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
   `;
 
     const topBar = document.createElement('div');
+    topBar.classList.add('site-header');
     Object.assign(topBar.style, {
         position: 'fixed',
         top: '0',
@@ -86,6 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
         zIndex: '10',
     });
     const designerSubtitle = document.createElement('div');
+    designerSubtitle.classList.add('site-subtitle');
 designerSubtitle.textContent = '3D Artist & Digital Designer';
 
 Object.assign(designerSubtitle.style, {
@@ -146,7 +151,11 @@ topBar.appendChild(designerSubtitle);
 
     videow1.addEventListener('click', () => window.location.href = 'work1.html');
 
-    row1.appendChild(videow1);
+    const workLink = document.createElement('a');
+    workLink.className = 'mobile-caption';
+    workLink.href = 'work1.html';
+    workLink.textContent = 'Work for @luasunday';
+    row1.append(videow1, workLink);
     grid.appendChild(row1);
 
 

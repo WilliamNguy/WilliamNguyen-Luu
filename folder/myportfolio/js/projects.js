@@ -5,6 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const customCursor = document.createElement('div');
+    customCursor.classList.add('pointer-decoration');
 customCursor.textContent = '';    
     const projectCategories = [
     'ENVIRONMENTS',
@@ -127,6 +128,21 @@ img4.dataset.category = 'MODELLING';
 video5.dataset.category = 'MOTION';
 img6.dataset.category = 'VFX';
 
+    [
+        [img1, 'project1.html', 'Interiors'],
+        [img2, 'project2.html', 'Entanglement'],
+        [img3, 'project3.html', 'Environments'],
+        [img4, 'project4.html', 'Modelling'],
+        [video5, 'project5.html', 'Motion'],
+        [img6, 'project6.html', 'VFX']
+    ].forEach(([media, href, title]) => {
+        const link = document.createElement('a');
+        link.className = 'mobile-caption';
+        link.href = href;
+        link.textContent = title;
+        media.after(link);
+    });
+
     // Assemble grid
     grid.appendChild(row3);
     grid.appendChild(row2);
@@ -188,6 +204,7 @@ img6.dataset.category = 'VFX';
     // =============================
 
     const projectsLabel = document.createElement('div');
+    projectsLabel.classList.add('site-brand');
     projectsLabel.textContent = 'William Nguyen-Luu';
 
     Object.assign(projectsLabel.style, {
@@ -202,6 +219,7 @@ img6.dataset.category = 'VFX';
     });
 
     const navBar = document.createElement('div');
+    navBar.classList.add('site-nav');
     Object.assign(navBar.style, {
         display: 'flex',
         gap: '5vw',
@@ -217,6 +235,7 @@ img6.dataset.category = 'VFX';
     `;
 
     const topBar = document.createElement('div');
+    topBar.classList.add('site-header');
     Object.assign(topBar.style, {
         position: 'fixed',
         top: '0',
@@ -231,6 +250,7 @@ img6.dataset.category = 'VFX';
         zIndex: '12'
     });
     const designerSubtitle = document.createElement('div');
+    designerSubtitle.classList.add('site-subtitle');
 designerSubtitle.textContent = '3D Artist & Digital Designer';
 
 Object.assign(designerSubtitle.style, {

@@ -109,6 +109,7 @@ Promise.all([
 
     </style>
 
+  <link rel="stylesheet" href="css/mobile.css">
 </head>
 
 
@@ -261,6 +262,8 @@ Promise.all([
             document.createElement('div');
 
 
+        projectCursor.classList.add('pointer-decoration');
+
         Object.assign(projectCursor.style, {
 
             position: 'fixed',
@@ -322,6 +325,14 @@ Promise.all([
         // ========================================
 
         vfxVideos.forEach(video => {
+            const caption = document.createElement('details');
+            caption.className = 'mobile-caption';
+            const summary = document.createElement('summary');
+            summary.textContent = video.dataset.title;
+            const copy = document.createElement('p');
+            copy.textContent = video.dataset.type + " · " + vfxDescription.trim();
+            caption.append(summary, copy);
+            video.after(caption);
 
 
             // ------------------------------------

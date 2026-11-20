@@ -3,6 +3,7 @@
 // ========================================
 
 const topBar = document.createElement('div');
+topBar.classList.add('site-header');
 
 Object.assign(topBar.style, {
     position: 'fixed',
@@ -26,6 +27,7 @@ document.body.appendChild(topBar);
 // ========================================
 
 const projectsLabel = document.createElement('div');
+projectsLabel.classList.add('site-brand');
 
 projectsLabel.textContent = 'William Nguyen-Luu';
 
@@ -54,6 +56,7 @@ topBar.appendChild(projectsLabel);
 // ========================================
 
 const navBar = document.createElement('div');
+navBar.classList.add('site-nav');
 
 Object.assign(navBar.style, {
     display: 'flex',
@@ -205,6 +208,7 @@ const gallery = document.getElementById('motion-gallery');
 // ========================================
 
 const projectCursor = document.createElement('div');
+projectCursor.classList.add('pointer-decoration');
 
 Object.assign(projectCursor.style, {
     position: 'fixed',
@@ -358,6 +362,18 @@ function createVideo(project, large = false) {
 // CREATE NORMAL ROW
 // ========================================
 
+function appendMotionVideo(row, project, large = false) {
+    const video = createVideo(project, large);
+    const caption = document.createElement('details');
+    caption.className = 'mobile-caption';
+    const summary = document.createElement('summary');
+    summary.textContent = project.title;
+    const copy = document.createElement('p');
+    copy.textContent = project.type + " · " + project.description;
+    caption.append(summary, copy);
+    row.append(video, caption);
+}
+
 function createRow(projectList) {
 
     const row = document.createElement('div');
@@ -380,13 +396,7 @@ function createRow(projectList) {
     });
 
 
-    projectList.forEach(project => {
-
-        row.appendChild(
-            createVideo(project)
-        );
-
-    });
+    projectList.forEach(project => appendMotionVideo(row, project));
 
 
     gallery.appendChild(row);
@@ -417,9 +427,7 @@ function createLargeVideo(project) {
     });
 
 
-    row.appendChild(
-        createVideo(project, true)
-    );
+    appendMotionVideo(row, project, true);
 
 
     gallery.appendChild(row);

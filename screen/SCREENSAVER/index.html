@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nostalgia Screensaver</title>
 
 
@@ -146,6 +147,12 @@
             100% {
                 transform: translateX(120%);
             }
+        }
+        @media (max-width: 767px), (max-width: 950px) and (pointer: coarse) {
+            body { overflow-wrap: anywhere; }
+            button { min-height: 44px; min-width: 64px; }
+            #screen { height: 75svh; touch-action: none; }
+            #neutralScreen { font-size: clamp(18px, 6vw, 32px) !important; text-align: center; }
         }
     </style>
 </head>
@@ -1108,6 +1115,18 @@
         screenDiv.addEventListener("mousedown", onMouseDown);
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("mouseup", onMouseUp);
+        screenDiv.addEventListener("pointerdown", event => {
+            if (event.pointerType !== "touch" || !event.isPrimary) return;
+            event.preventDefault();
+            screenDiv.setPointerCapture(event.pointerId);
+            onMouseDown(event);
+        });
+        screenDiv.addEventListener("pointermove", event => {
+            if (event.pointerType === "touch" && screenDiv.hasPointerCapture(event.pointerId)) {
+                onMouseMove(event);
+            }
+        });
+        screenDiv.addEventListener("lostpointercapture", onMouseUp);
 
         window.addEventListener("keydown", onKeyDown);
         window.addEventListener("keyup", onKeyUp);
@@ -1120,7 +1139,7 @@
 
         function onMouseDown(event) {
             // 0–17: first click → enable manual mze control
-            if (mazeActive) {
+            if (mazeActive && event.pointerType !== "touch") {
                 if (!mazeManual) {
                     mazeManual = true; // stop auto mode
                 }

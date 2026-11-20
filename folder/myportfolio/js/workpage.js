@@ -1,4 +1,6 @@
+const phoneLayout = window.matchMedia('(max-width: 767px), (max-width: 950px) and (pointer: coarse)');
 const topBar = document.createElement('div');
+topBar.classList.add('site-header');
 Object.assign(topBar.style, {
     position: 'fixed',
     top: '0',
@@ -19,6 +21,7 @@ document.body.appendChild(topBar);
 
 // === Projects Label (Name) ===
 const projectsLabel = document.createElement('div');
+projectsLabel.classList.add('site-brand');
 projectsLabel.textContent = 'William Nguyen-Luu';
 Object.assign(projectsLabel.style, {
     fontSize: '2vw',
@@ -36,6 +39,7 @@ topBar.appendChild(projectsLabel);
 
 // === Nav Bar (Links) ===
 const navBar = document.createElement('div');
+navBar.classList.add('site-nav');
 Object.assign(navBar.style, {
     display: 'flex',
     gap: '5vw',
@@ -55,6 +59,7 @@ topBar.appendChild(navBar);
 // ========================================
 
 const workInfo = document.createElement('section');
+workInfo.classList.add('work-info');
 
 Object.assign(workInfo.style, {
     width: '100vw',
@@ -79,6 +84,7 @@ workInfo.innerHTML = `
 document.body.appendChild(workInfo);
 
 const videoWrapper = document.createElement('div');
+videoWrapper.classList.add('work-scroll-video');
 Object.assign(videoWrapper.style, {
     width: '100vw',
     height: '100vh',
@@ -110,6 +116,13 @@ videoWrapper.appendChild(scrollVideo);
 
 
 // === Scroll-driven video control ===
+
+function syncWorkVideoControls() {
+    scrollVideo.controls = phoneLayout.matches;
+}
+
+syncWorkVideoControls();
+phoneLayout.addEventListener('change', syncWorkVideoControls);
 
 let isScrolling;
 let rafId;
@@ -149,6 +162,7 @@ scrollVideo.addEventListener('loadedmetadata', () => {
     }
 
     function onScroll() {
+        if (phoneLayout.matches) return;
         if (!rafId) {
             rafId = requestAnimationFrame(() => {
                 animate();
@@ -167,6 +181,7 @@ scrollVideo.addEventListener('loadedmetadata', () => {
 });
 
 const introVideoWrapper = document.createElement('div');
+introVideoWrapper.classList.add('work-video-pair');
 Object.assign(introVideoWrapper.style, {
     width: '100vw',
     // backgroundColor: 'black',
@@ -216,6 +231,7 @@ introVideoWrapper.appendChild(introVideo2);
 document.body.appendChild(introVideoWrapper);
 
 const imageGallery = document.createElement('div');
+imageGallery.classList.add('work-gallery');
 Object.assign(imageGallery.style, {
     width: '100vw',
     display: 'flex',

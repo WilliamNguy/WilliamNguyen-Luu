@@ -1,4 +1,5 @@
 const topBar = document.createElement('div');
+topBar.classList.add('site-header');
 Object.assign(topBar.style, {
     position: 'fixed',
     top: '0',
@@ -15,6 +16,7 @@ Object.assign(topBar.style, {
 });
 document.body.appendChild(topBar);
 const designerSubtitle = document.createElement('div');
+designerSubtitle.classList.add('site-subtitle');
 designerSubtitle.textContent = '3D Artist & Digital Designer';
 
 Object.assign(designerSubtitle.style, {
@@ -33,6 +35,7 @@ topBar.appendChild(designerSubtitle);
 
 // === Projects Label (Name) ===
 const projectsLabel = document.createElement('div');
+projectsLabel.classList.add('site-brand');
 projectsLabel.textContent = 'William Nguyen-Luu';
 Object.assign(projectsLabel.style, {
     fontSize: '2vw',
@@ -49,6 +52,7 @@ topBar.appendChild(projectsLabel);
 
 // === Nav Bar (Links) ===
 const navBar = document.createElement('div');
+navBar.classList.add('site-nav');
 Object.assign(navBar.style, {
     display: 'flex',
     gap: '5vw',

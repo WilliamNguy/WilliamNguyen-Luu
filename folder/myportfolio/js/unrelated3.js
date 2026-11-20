@@ -20,6 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const customCursor = document.createElement('div');
+    customCursor.classList.add('pointer-decoration');
     customCursor.textContent = 'click me';
 
     Object.assign(customCursor.style, {
@@ -47,6 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const projectsLabel = document.createElement('div');
+    projectsLabel.classList.add('site-brand');
     projectsLabel.textContent = 'William Nguyen-Luu';
 
     Object.assign(projectsLabel.style, {
@@ -73,6 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const navBar = document.createElement('div');
+    navBar.classList.add('site-nav');
 
     Object.assign(navBar.style, {
         position: 'fixed',
@@ -105,6 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const topBar = document.createElement('div');
+    topBar.classList.add('site-header');
 
     Object.assign(topBar.style, {
         position: 'fixed',
@@ -131,6 +135,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // =============================
 
     const content = document.createElement('div');
+    content.classList.add('experiment-content');
 
     Object.assign(content.style, {
         marginTop: '20vh',

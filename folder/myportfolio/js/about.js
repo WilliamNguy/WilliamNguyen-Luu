@@ -1,4 +1,5 @@
 const projectsLabel = document.createElement('div');
+projectsLabel.classList.add('site-brand');
 projectsLabel.textContent = 'William Nguyen-Luu';
 Object.assign(projectsLabel.style, {
     position: 'absolute',
@@ -17,6 +18,7 @@ projectsLabel.addEventListener('click', () => {
 document.body.appendChild(projectsLabel);
 
 const navBar = document.createElement('div');
+navBar.classList.add('site-nav');
 Object.assign(navBar.style, {
     position: 'absolute',
     top: '4vh',
